@@ -8,11 +8,30 @@
     </head>
     <body>
         <div class="menu">
-            <button class="menu-content">Dungeon</button>
+            <button class="menu-content" onclick="enemyGenerator()">Dungeon</button>
             <button class="menu-content">Market</button>
             <button class="menu-content">Character</button>
         </div>
-        <h1 id="headr"></h1>
+        <div class="dungeon">
+            <h1>The dungeon</h1>
+            <div class="enemy">
+                <h1 id="enemy-name"></h1>
+                <h1 id="enemy-stats"></h1>
+                <h1 id="enemy-move" class="hidden"></h1>
+            </div>
+            <div class="character">
+                <h1 id="character-move" class="hidden"></h1>
+                <h1 id="character-name"></h1>
+                <h1 id="character-stats"></h1>
+                <div class="moves"></div>
+            </div>
+        </div>
+        <div class="market">
+
+        </div>
+        <div class="character">
+
+        </div>
         <script src="script.js"></script>
     </body>
 </html>

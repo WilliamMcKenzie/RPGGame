@@ -37,7 +37,21 @@ function enemyGenerator(){
     health = Math.floor(Math.random() * (maxHealth - minHealth + 1) + minHealth)
     damage = Math.floor(Math.random() * (maxDamage - minDamage + 1) + minDamage)
 
-    window.alert(health)
+    var enemies = ["Werewolf","Goblin","Hobgoblin","Mole King","Molanoid","E.T","Samantha","Grotesque Guardian","Kirklander","Silicon Baby","Wet Blanket"]
+    var enemyName = enemies[Math.floor(Math.random() * enemies.length)]
+
+    var enemyNameEle = document.getElementById("enemy-name").innerHTML
+    var enemyStatsEle = document.getElementById("enemy-stats").innerHTML
+
+    enemyNameEle = enemyName
+    enemyStatsEle = `Health: ${health} Level: ${enemyLevel}`
+}
+
+function moveGenerator(){
+    var moves = ["Megamind","Laxative Beam","Small Forward","Megabalista","Devastation Lazer","Ravana","Burial","Sacrilige","Stompinater"]
+    var moveName = moves[Math.floor(Math.random() * moves.length)]
+    var enemyMoveEle = document.getElementById("enemy-move").innerHTML
+    enemyMoveEle = moveName
 }
 
 
