@@ -2,7 +2,9 @@ body {
     text-align: center;
     justify-content: center;
     display: flex;
-
+    font-family: "Trebuchet MS";
+    font-size: 9px;
+    
     --color1: #03AF11;
     --color2: #03AF67;
     --color3: #03A1AF;
@@ -28,6 +30,7 @@ body {
 
 }
 
-.hidden {
-    display: none;
+.character {
+    position: absolute;
+    bottom:50px;
 }
