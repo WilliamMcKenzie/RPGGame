@@ -17,3 +17,9 @@ body {
 .heading {
     color: var(--color4);
 }
+
+.menu-content {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+}
