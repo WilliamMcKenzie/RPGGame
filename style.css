@@ -4,20 +4,17 @@ body {
     display: flex;
     font-family: "Trebuchet MS";
     font-size: 9px;
+    color: #5C6667 ;
     
-    --color1: #03AF11;
-    --color2: #03AF67;
-    --color3: #03A1AF;
-    --color4: #1103AF;
-    background: url("https://www.flaticon.com/free-icon/bakery-store_80078");
+    --color1: #15AE1D;
+    --color2: #14A94C;
+    --color3: #149576;
+    --color4: #148391;
+    background: url("https://www.pixelstalk.net/wp-content/uploads/2016/10/Desktop-Free-Anime-Landscape-Backgrounds.jpg");
 }
 
 .hidden {
     display: none;
-}
-
-.heading {
-    color: var(--color4);
 }
 
 .menu {
@@ -32,5 +29,41 @@ body {
 
 .character {
     position: absolute;
-    bottom:50px;
+    bottom:10px;
+    padding-left: 200px;
+    padding-right: 200px;
+}
+
+.dungeon {
+    background-color: aliceblue;
+    padding-left: 200px;
+    padding-right: 200px;
+    padding-bottom: 800px;
+    border: 20px solid #ADBDBF;
+    border-radius: 10px;
+}
+
+.ui {
+    border:none;
+    border-radius: 10px;
+    z-index: 10;
+    background-color: white;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.move {
+    border:2px solid #ADBDBF;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: 'Trebuchet MS';
+}
+
+.swordIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
