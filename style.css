@@ -44,7 +44,7 @@ body {
 }
 
 .ui {
-    border:none;
+    border:10px solid #ADBDBF;
     border-radius: 10px;
     z-index: 10;
     background-color: white;
@@ -52,13 +52,29 @@ body {
     padding-right: 50px;
     padding-top: 50px;
     padding-bottom: 50px;
+
 }
 
 .move {
-    border:2px solid #ADBDBF;
+    border:3px solid #ADBDBF;
     border-radius: 10px;
     font-size: 18px;
     font-family: 'Trebuchet MS';
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    color: #5C6667;
+    font-weight: 700;
+}
+
+.move:hover {
+    transform: scale(1.02);
+    border:3px solid #929D9E  ;
+}
+
+.move:active {
+    transform: scale(0.98);
 }
 
 .swordIcon {

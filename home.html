@@ -12,20 +12,29 @@
             <button class="menu-content">Market</button>
             <button class="menu-content">Character</button>
         </div>
-        <div class="dungeon hidden" id="dungeon-div">
-            <h1 style="font-size: 40px;">The Dungeon</h1>
-            <div class="enemy">
-                <h1 id="enemy-name" style="font-size: 25px"></h1>
-                <h1 id="enemy-stats"></h1>
-                <h1 id="enemy-move" class="hidden"></h1>
-            </div>
-            <div class="character">
-                <h1 id="character-moves" class="hidden">
-                    <button class="move" onclick="retreat()">Retreat</button>
-                </h1>
-                <h1 id="character-name" style="font-size: 25px"></h1>
-                <h1 id="character-stats"></h1>
-                <div class="moves"></div>
+        <div>
+            <div id="dungeon-div" class="hidden">
+                <div class="enemy dungeon">
+                    <h1 id="enemy-name" style="font-size: 25px"></h1>
+                    <h1 id="enemy-stats"></h1>
+                </div>
+                <div id="victory">
+
+                </div>
+                <div id="death">
+                    
+                </div>
+                <img class="swordIcon" src="https://cdn-icons-png.flaticon.com/512/2074/2074786.png">
+                <div class="character">
+                    <h1 id="character-name" style="font-size: 25px"></h1>
+                    <h1 id="character-stats"></h1>
+                    <div class="ui">
+                        <div id="character-moves" class="hidden">
+                            <button class="move" onclick="retreat()">Retreat</button>
+                        </div>
+                        <div id="opponents-move" class=""></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="market">
