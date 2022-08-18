@@ -46,17 +46,21 @@ function generator(){
     document.getElementById("character-name").textContent = username
     document.getElementById("character-stats").textContent = `Health: ${health} Level: ${level}`
 
-    speed > enemySpeed ? playerTurn() : enemyTurn
+    speed > enemySpeed ? playerTurn() : enemyTurn()
 }
-//if turn = 1
+//load moves
 function playerTurn(){
-    document.getElementById("character-moves").classList.remove("hidden")
+    var d = document.getElementById("character-moves")
+    d.classList.remove("hidden")
     for(var i = 0; i < moves.length; i++){
-        let btn = document.createElement("button");
-        btn.innerHTML = moves[i].name;
-        btn.classList.add("move")
-        document.getElementById("character-moves").appendChild(btn);
+        let button = document.createElement("button");
+        button.innerHTML = moves[i].name;
+        button.onclick = function playerAttack(){
+            window.alert(moves[i].damage))
+        }
+        document.getElementById("character-moves").appendChild(button);
     }
+
 }
 //enemy uses random attack
 function enemyTurn(){
@@ -70,9 +74,13 @@ function moveGenerator(){
     document.getElementById("enemystats").textContent = `Health: ${health} Damage: ${damage}`
 }
 
+
 function retreat(){
     document.getElementById("menu").classList.remove("hidden")
     document.getElementById("dungeon-div").classList.add("hidden")
+    for(var i = 0; i < moves.length-1; i++){
+        document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild)
+    }
 }
 
 
