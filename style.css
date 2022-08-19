@@ -5,12 +5,18 @@ body {
     font-family: "Trebuchet MS";
     font-size: 9px;
     color: #5C6667 ;
-    
-    --color1: #15AE1D;
-    --color2: #14A94C;
-    --color3: #149576;
-    --color4: #148391;
+
     background: url("https://www.pixelstalk.net/wp-content/uploads/2016/10/Desktop-Free-Anime-Landscape-Backgrounds.jpg");
+}
+
+#overlay {
+    z-index: 9;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .hidden {
@@ -28,6 +34,7 @@ body {
 }
 
 .character {
+    z-index: 8;
     position: absolute;
     bottom:10px;
     padding-left: 200px;
@@ -35,9 +42,9 @@ body {
 }
 
 .dungeon {
+    z-index: 8;
     background-color: aliceblue;
-    padding-left: 200px;
-    padding-right: 200px;
+    width: 650px;
     padding-bottom: 800px;
     border: 20px solid #ADBDBF;
     border-radius: 10px;
@@ -50,9 +57,17 @@ body {
     background-color: white;
     padding-left: 50px;
     padding-right: 50px;
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding-top: 40px;
+    width:150px;
+    height: 40px;
+}
 
+#ui-text {
+    font-size: 15px;
+    font-family: 'Trebuchet MS';
+    font-weight: 600;
+    font-style: italic;
+    color: #5C6667;
 }
 
 .move {
@@ -66,15 +81,19 @@ body {
     padding-bottom: 8px;
     color: #5C6667;
     font-weight: 700;
+    transition: background 0.5s, border-color 0.2s; 
 }
+
 
 .move:hover {
     transform: scale(1.02);
-    border:3px solid #929D9E  ;
+    border:3px solid #929D9E;
+    cursor: grab;
 }
 
 .move:active {
     transform: scale(0.98);
+    cursor: grabbing;
 }
 
 .swordIcon {
@@ -83,3 +102,60 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+#victory {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+#victory-header {
+    padding-bottom: 30%;
+}
+
+.drop-table {
+    color:#E0B23B;
+    font-family: 'Trebuchet MS';
+    font-weight: bold;
+    font-size: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: aliceblue;
+    border-collapse: collapse;
+    border: 2px solid black;
+    padding: 100px;
+}
+.drop-table-parent {
+    z-index: 100;
+}
+
+.continue {
+    color:#916F16;
+    border: solid #E0B23B; 
+    border-radius: 7px; 
+    padding: 13px;
+    
+    font-family: 'Trebuchet MS';
+    font-weight: bold;
+    font-size: 20px;
+    transform: scale(1.04);
+}
+.continue:hover {
+    transform: scale(1.06);
+    cursor: grab;
+
+}
+.continue:active {
+    transform: scale(1.02);
+    cursor: grabbing;
+}
+
+#death {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+

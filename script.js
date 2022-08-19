@@ -5,46 +5,102 @@ var exp = 1
 
 var health = 100
 var damage = 10
-var defense = 0
 var speed = 40
 
 var enemyLevel
 var enemyHealth
-var enemyDamage
 var enemySpeed
+var enemyGrade
 
-var moves = [{name: "Slam", damage: 12}]
+var drops = []
+var moves = [{name: "Slam", damage: 12},{name: "Slice", damage: 50},{name: "Heal", damage: -50}]
 
 var storage = []
 var equipped = {}
 
-window.onbeforeunload = function() { return "Your work will be lost."; };
-
+window.onbeforeunload = function() { return "Your progress will be lost."; };
+function enemyDamageCalc(){
+    var minDamage = 5 + enemyLevel*2, maxDamage = 5 + enemyLevel*4
+    var enemyDamage = Math.floor(Math.random() * (maxDamage - minDamage + 1) + minDamage)
+    return enemyDamage
+}
+function enemyHealthCalc(){
+    var minHealth = 20 + enemyLevel*5, maxHealth = 20 + enemyLevel*10
+    enemyHealth = Math.floor(Math.random() * (maxHealth - minHealth + 1) + minHealth)
+    return enemyHealth
+}
+function enemySpeedCalc(){
+    var minSpeed = 10 + enemyLevel*3, maxSpeed = 10 + enemyLevel*5
+    enemySpeed = Math.floor(Math.random() * (maxSpeed - minSpeed + 1) + minSpeed)
+    return enemySpeed
+}
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 function moveGenerator(){
     //get damage
-    var minDamage = 5 + enemyLevel*2, maxDamage = 5 + enemyLevel*4
-    var enemyDamage = 0
-    enemyDamage = Math.floor(Math.random() * (maxDamage - minDamage + 1) + minDamage)
+    var enemyDamage = enemyDamageCalc()
     //get name
     var moves = ["Megamind","Laxative Beam","Small Forward","Megabalista","Devastation Lazer","Ravana","Burial","Sacrilige","Stompinater"]
     var moveName = moves[Math.floor(Math.random() * moves.length)]
     return {name : moveName, damage : enemyDamage}
+}//randomizer
+function random(num){
+    var res = 1 + Math.floor(Math.random()*num)
+    return res
 }
+function gradeCalc(){
+    var rnd = random(75)
+    var res = "FF"
+    switch(true){
+        case (rnd < 10):
+            res= "F"
+            break;
+        case (rnd < 20):
+            res= "D"   
+            break; 
+        case (rnd < 30):
+            res= "C"
+            break;
+        case (rnd < 40):
+            res= "B"
+            break;
+        case (rnd < 50):
+            res= "A"
+            break;
+        case (rnd < 60):
+            res= "S"
+            break;
+        case (rnd < 70):
+            res= "SS"
+            break;
+        default:
+            break;
+    }
+    return res
+}
+function setMenu(){
+    var ui = document.getElementById("ui").style
+    if(moves.length > 1){
+        ui.paddingBottom="75px";
+    }
+    else{
+        ui.paddingBottom="50px"
+    }
+}
+
 
 //DUNGEON!! 
 //generate enemy and dungeon prerequisites
 function generator(){
-
+    setMenu()
     document.getElementById("menu").classList.add("hidden")
     document.getElementById("dungeon-div").classList.remove("hidden")
 
     //gen enemy
     enemyLevel = Math.floor((Math.random() * level) + 1)
-    var minHealth = 20 + enemyLevel*5, maxHealth = 20 + enemyLevel*10
-    var minSpeed = 10 + enemyLevel*3, maxSpeed = 10 + enemyLevel*5
-
-    enemySpeed = Math.floor(Math.random() * (maxSpeed - minSpeed + 1) + minSpeed)
-    enemyHealth = Math.floor(Math.random() * (maxHealth - minHealth + 1) + minHealth)
+    enemyHealth = enemyHealthCalc()
+    enemySpeed= enemySpeedCalc()
 
     //possible names
     var enemies = ["Werewolf","Goblin","Hobgoblin","Mole King","Molanoid","E.T","Samantha","Grotesque Guardian","Kirklander","Silicon Baby","Wet Blanket"]
@@ -60,19 +116,52 @@ function generator(){
 
     loadDungeon()
 }
+
+function enemyDrops(){
+    var name = "assnutt"
+    var itemGr = gradeCalc()
+    var num = random(3)
+
+    var damage = enemyDamageCalc()
+    var health = enemyHealthCalc()
+    var speed = enemySpeedCalc()
+    
+    damage = damage/2
+    health = health/2
+    speed = speed/2
+    
+    switch(num){
+        case 1:
+            var res = new sword(name, damage, speed, itemGr)
+            break;
+        case 2:
+            var res = new armour(name, health, speed, grade)
+            break;
+        case 3:
+            var res = new ring(name, health, damage, speed, grade)
+    }
+    window.alert("enem")
+    return res
+}
 //create moves
 function loadDungeon(){
-    var enemyEleName = document.getElementById("enemy-name").textContent
+    var uiText = document.getElementById("ui-text")
+    var ui = document.getElementById("ui").style
+    var charMovesEle = document.getElementById("character-moves")
     for(var i = 0; i < moves.length; i++){
         let x = moves[i].damage
         let y = moves[i].name
         let button = document.createElement("button");
         button.innerHTML = y
         button.classList.add("move")
-        button.onclick = function playerAttack(){
+        button.onclick = async function playerAttack(){
+            ui.paddingBottom="50px"
             var total = (x + damage)+Math.floor(Math.random() * speed/20)
-            window.alert(`You use ${y} on ${enemyEleName} for ${total} damage!`)
+            charMovesEle.classList.add("hidden")
+            uiText.classList.remove("hidden")
+            uiText.textContent = `You used ${y}, dealing ${total} damage!`
             enemyHealth -= total
+            await sleep(2000)
             enemyTurn()
         }
         document.getElementById("character-moves").appendChild(button);
@@ -82,21 +171,25 @@ function loadDungeon(){
 function playerTurn(){
     document.getElementById("character-stats").textContent = `Health: ${health} Speed: ${speed} Level: ${level}`
     if (health < 0) death()
+    setMenu()
+    document.getElementById("ui-text").classList.add("hidden")
     var d = document.getElementById("character-moves")
     d.classList.remove("hidden")
 }
-function enemyTurn(){
+async function enemyTurn(){
     document.getElementById("enemy-stats").textContent = `Health: ${enemyHealth} Speed: ${enemySpeed} Level: ${enemyLevel}`
     if (enemyHealth < 0) victory()
     var enemyInfo = moveGenerator()
-    window.alert(`${document.getElementById("enemy-name").textContent} uses ${enemyInfo.name}, dealing ${enemyInfo.damage}!`)
+    document.getElementById("ui-text").textContent = (`${document.getElementById("enemy-name").textContent} uses ${enemyInfo.name}, dealing ${enemyInfo.damage}!`)
     health -= enemyInfo.damage
+    await sleep(2000)
     playerTurn()
 }
 
 //possible exit functions
-function victory(){
-    
+async function victory(){
+    document.getElementById("overlay").classList.remove("hidden")
+    document.getElementById("victory").classList.remove("hidden")
 }
 function death(){
 
@@ -106,6 +199,21 @@ function retreat(){
     document.getElementById("dungeon-div").classList.add("hidden")
     for(var i = 0; i < moves.length; i++){
         document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild)
+    }
+}
+
+//drop system
+function dropTable(){
+    document.getElementById("drop-table").classList.remove("hidden")
+    document.getElementById("victory").classList.add("hidden")
+    count = random(3)
+    window.alert(count)
+    for(var i = 0; i < count; i++){
+        drops.push(enemyDrops())
+        window.alert("drops[i]")
+    }
+    for(var i = 0; i < count; i++){
+        window.alert(drops[i])
     }
 }
 
@@ -123,9 +231,11 @@ function retreat(){
 
 
 class sword{
-    constructor(damage, speed){
+    constructor(name, damage, speed, grade){
        this.damage = damage 
        this.speed = speed
+       this.grade = grade
+       this.name = name
     }
     get damage(){
         return damage
@@ -138,45 +248,15 @@ class sword{
     }
     get defense(){
         return 0
-    }
-    get grade(){
-        return this.calcGrade();
-    }
-
-    calcGrade(){
-        var stat = speed + damage
-        if(stat > 180){
-            return "SS"
-        }
-        else if(stat > 150){
-            return "S"
-        }
-        else if(stat > 120){
-            return "A"
-        }
-        else if(stat > 90){
-            return "B"
-        }
-        else if(stat > 60){
-            return "C"
-        }
-        else if(stat > 30){
-            return "D"
-        }
-        else if(stat > 0){
-            return "F"
-        }
     }
 }
 
 class armour{
-    constructor(defense, health, speed){
-       this.defense = defense
+    constructor(name, health, speed, grade){
        this.health = health
        this.speed = speed
-    }
-    get defense(){
-        return defense
+       this.grade = grade
+       this.name = name
     }
     get health(){
         return health
@@ -184,45 +264,15 @@ class armour{
     get speed(){
         return speed
     }
-    get grade(){
-        return this.calcGrade();
-    }
-
-    calcGrade(){
-        var stat = health + defense
-        if(stat > 180){
-            return "SS"
-        }
-        else if(stat > 150){
-            return "S"
-        }
-        else if(stat > 120){
-            return "A"
-        }
-        else if(stat > 90){
-            return "B"
-        }
-        else if(stat > 60){
-            return "C"
-        }
-        else if(stat > 30){
-            return "D"
-        }
-        else if(stat > 0){
-            return "F"
-        }
-    }
 }
 
 class ring{
-    constructor(defense, health, speed, damage){
-       this.defense = defense
+    constructor(name, health, speed, damage, grade){
        this.health = health
        this.speed = speed
        this.damage = damage
-    }
-    get defense(){
-        return defense
+       this.grade = grade
+       this.name = name
     }
     get health(){
         return health
@@ -232,34 +282,6 @@ class ring{
     }
     get damage(){
         return damage
-    }
-    get grade(){
-        return this.calcGrade();
-    }
-
-    calcGrade(){
-        var stat = health + defense + speed + damage
-        if(stat > 180){
-            return "SS"
-        }
-        else if(stat > 150){
-            return "S"
-        }
-        else if(stat > 120){
-            return "A"
-        }
-        else if(stat > 90){
-            return "B"
-        }
-        else if(stat > 60){
-            return "C"
-        }
-        else if(stat > 30){
-            return "D"
-        }
-        else if(stat > 0){
-            return "F"
-        }
     }
 }
 

@@ -15,28 +15,46 @@
         <div>
             <div id="dungeon-div" class="hidden">
                 <div class="enemy dungeon">
-                    <h1 id="enemy-name" style="font-size: 25px"></h1>
+                    <h1 id="enemy-name" style="font-size: 25px;"></h1>
                     <h1 id="enemy-stats"></h1>
                 </div>
-                <div id="victory">
-
+                <div id="victory" class="hidden">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1907/1907867.png" style="scale: 100%">
+                    <div style="font-size:80px; color:#E0B23B; font-weight: bold;" id="victory-header">VICTORY</div>
+                    <button class="continue" onclick="dropTable()">Continue</button>
                 </div>
-                <div id="death">
+                <div id="drop-table" class="drop-table-parent hidden">
+                    <table class="drop-table">
+                        <caption>Drops</caption>
+                        <tr>
+                            <th>Item</th>
+                            <th>Rank</th>
+                            <th>Type</th>
+                        </tr>
+                        <tr>
+                            <td>Eve</td>
+                            <td>Jackson</td>
+                            <td>94</td>
+                          </tr>
+                    </table>
+                </div>
+                <div id="death" class="hidden">
                     
                 </div>
                 <img class="swordIcon" src="https://cdn-icons-png.flaticon.com/512/2074/2074786.png">
                 <div class="character">
                     <h1 id="character-name" style="font-size: 25px"></h1>
                     <h1 id="character-stats"></h1>
-                    <div class="ui">
+                    <div id="ui" class="ui">
                         <div id="character-moves" class="hidden">
                             <button class="move" onclick="retreat()">Retreat</button>
                         </div>
-                        <div id="opponents-move" class=""></div>
+                        <div id="ui-text"></div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="hidden" id="overlay"></div>
         <div class="market">
 
         </div>
