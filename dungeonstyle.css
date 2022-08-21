@@ -4,7 +4,11 @@ body {
     display: flex;
     font-family: "Trebuchet MS";
     font-size: 9px;
-    color: #5C6667 ;
+    color: #5C6667;
+
+    --backgroundcolor: aliceblue;
+    --bordercolor: #ADBDBF;
+    --text: #5C6667;
 
     background: url("https://www.pixelstalk.net/wp-content/uploads/2016/10/Desktop-Free-Anime-Landscape-Backgrounds.jpg");
 }
@@ -39,6 +43,36 @@ body {
     bottom:10px;
     padding-left: 200px;
     padding-right: 200px;
+}
+
+#dungeon-button {
+    height: 40%; 
+    width: 9%; 
+    object-position: -20px -20px;
+}
+#market-button {
+    height: auto; 
+    width: auto; 
+    max-width: 12%; 
+    max-height: 12%;
+}
+#character-button {
+    height: auto; 
+    width: auto; 
+    max-width: 11%; 
+    max-height: 11%;
+}
+#character-button:hover {
+    max-width: 11.5%; 
+    max-height: 11.5%;
+}
+#market-button:hover {
+    max-width: 13%; 
+    max-height: 13%;
+}
+#dungeon-button:hover {
+    width: 9.5%; 
+    height: 9.5%;
 }
 
 .dungeon {
@@ -115,31 +149,34 @@ body {
     padding-bottom: 30%;
 }
 
-.drop-table {
-    color:#E0B23B;
+#drop-table {
+    color: var(--text);
     font-family: 'Trebuchet MS';
     font-weight: bold;
     font-size: 40px;
     margin-left: auto;
     margin-right: auto;
+    border: 10px solid var(--bordercolor);
+    border-radius: 50px;
     background-color: aliceblue;
-    border-collapse: collapse;
-    border: 2px solid black;
-    padding: 100px;
 }
-.drop-table-parent {
-    z-index: 100;
+#drop-table-parent {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
 }
 
 .continue {
-    color:#916F16;
-    border: solid #E0B23B; 
-    border-radius: 7px; 
-    padding: 13px;
-    
+    color: var(--text);
+    border:10px solid var(--bordercolor);
+    border-radius: 10px; 
+    padding: 20px;
+    background-color: var(--backgroundcolor);
     font-family: 'Trebuchet MS';
     font-weight: bold;
-    font-size: 20px;
+    font-size: 40px;
     transform: scale(1.04);
 }
 .continue:hover {
@@ -157,5 +194,9 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+th, td {
+    padding: 10px;
+
 }
 

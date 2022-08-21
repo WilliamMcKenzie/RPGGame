@@ -41,7 +41,7 @@ function moveGenerator(){
     //get damage
     var enemyDamage = enemyDamageCalc()
     //get name
-    var moves = ["Megamind","Laxative Beam","Small Forward","Megabalista","Devastation Lazer","Ravana","Burial","Sacrilige","Stompinater"]
+    var moves = ["Juicers Demise","Megamind","Laxative Beam","Small Forward","Megabalista","Devastation Lazer","Ravana","Burial","Sacrilige","Stompinater"]
     var moveName = moves[Math.floor(Math.random() * moves.length)]
     return {name : moveName, damage : enemyDamage}
 }//randomizer
@@ -49,30 +49,40 @@ function random(num){
     var res = 1 + Math.floor(Math.random()*num)
     return res
 }
+//thanks stackoverflow
+function removeElementsByClass(className){
+    const elements = document.getElementsByClassName(className);
+    while(elements.length > 0){
+        elements[0].parentNode.removeChild(elements[0]);
+    }
+}
 function gradeCalc(){
     var rnd = random(75)
-    var res = "FF"
+    var res = {grade:"FF",color:"#AFAFAF"}
     switch(true){
-        case (rnd < 10):
-            res= "F"
-            break;
-        case (rnd < 20):
-            res= "D"   
-            break; 
         case (rnd < 30):
-            res= "C"
+            res= {grade:"F",color:"#838484"}
             break;
         case (rnd < 40):
-            res= "B"
-            break;
+            res= {grade:"D",color:"#405266"}  
+            break; 
         case (rnd < 50):
-            res= "A"
+            res= {grade:"C",color:"#226C71"}  
             break;
         case (rnd < 60):
-            res= "S"
+            res= {grade:"B",color:"#23A388"}  
+            break;
+        case (rnd < 65):
+            res= {grade:"A",color:"#85B728"}  
             break;
         case (rnd < 70):
-            res= "SS"
+            res= {grade:"S",color:"#C7A000"}  
+            break;
+        case (rnd < 72):
+            res= {grade:"SS",color:"#C74000"}  
+            break;
+         case (rnd < 73):
+            res= {grade:"???",color:"#841799"}  
             break;
         default:
             break;
@@ -87,6 +97,29 @@ function setMenu(){
     else{
         ui.paddingBottom="50px"
     }
+}
+function randomName(){
+    var enemies = ["Man with a Sock","Soggy Juicer" ,"Werewolf","Goblin","Hobgoblin","Mole King","Molanoid","E.T.","Son of Yazanahar","Grotesque Guardian","Techno-tron","Silicon Baby","Red Champion"]
+    var res = enemies[Math.floor(Math.random() * enemies.length)]
+    return res
+}
+//go home
+function home(){
+    document.getElementById("dungeon-div").classList.add("hidden")
+    document.getElementById("market").classList.add("hidden")
+    document.getElementById("character").classList.add("hidden")
+    document.getElementById("overlay").classList.add("hidden")
+
+    //dungeon 
+    document.getElementById("victory").classList.add("hidden")
+    document.getElementById("drop-table-parent").classList.add("hidden")
+    document.getElementById("death").classList.add("hidden")
+    for(var i = 0; i < moves.length; i++){
+        document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild)
+    }
+    drops=[]
+    removeElementsByClass("tempData")
+    document.getElementById("menu").classList.remove("hidden")
 }
 
 
@@ -103,8 +136,7 @@ function generator(){
     enemySpeed= enemySpeedCalc()
 
     //possible names
-    var enemies = ["Werewolf","Goblin","Hobgoblin","Mole King","Molanoid","E.T","Samantha","Grotesque Guardian","Kirklander","Silicon Baby","Wet Blanket"]
-    var enemyName = enemies[Math.floor(Math.random() * enemies.length)]
+    var enemyName = randomName()
 
     //set enemy content
     document.getElementById("enemy-stats").textContent = `Health: ${enemyHealth} Speed: ${enemySpeed} Level: ${enemyLevel}`
@@ -117,11 +149,22 @@ function generator(){
     loadDungeon()
 }
 
-function enemyDrops(){
-    var name = "assnutt"
-    var itemGr = gradeCalc()
-    var num = random(3)
+function itemGenerator(){
+    
+    var style = random(4)-1
+    var swordStyles = [{name:"Shank", damage:10, speed:5},{name:"Blade", damage:5, speed:0},{name:"Claymore", damage:10, speed:-5},{name:"Daggers", damage:0, speed:5}]
+    var armourStyles = [{name:"Cardboard Box", health:15, speed:-6},{name:"Platemail", health:10, speed:0},{name:"Chainmail", health:20, speed:-5},{name:"Leather", health:0, speed:5}]
+    var ringStyles = [{name:"Shaman Mask", health:5, damage:2, speed:2},{name:"Necklace", health:5, damage:2, speed:2},{name:"Ring", health:2, damage:1, speed:6},{name:"Gauntlets", health:20, damage:-3, speed:-6}]
 
+    var swordStyle = swordStyles[style]
+    var armourStyle = armourStyles[style]
+    var ringStyle = ringStyles[style]
+
+    var name = randomName()
+
+    var grade = gradeCalc()
+    var num = random(3)
+    
     var damage = enemyDamageCalc()
     var health = enemyHealthCalc()
     var speed = enemySpeedCalc()
@@ -129,18 +172,21 @@ function enemyDrops(){
     damage = damage/2
     health = health/2
     speed = speed/2
-    
+
+    var res 
     switch(num){
         case 1:
-            var res = new sword(name, damage, speed, itemGr)
+            res = new sword(`${swordStyle.name} of the ${name}`, damage+swordStyle.damage, speed+swordStyle.speed, grade)
             break;
         case 2:
-            var res = new armour(name, health, speed, grade)
+            res = new armour(`${armourStyle.name} of the ${name}`, health+armourStyle.health, speed+armourStyle.speed, grade)
             break;
         case 3:
-            var res = new ring(name, health, damage, speed, grade)
+            res = new ring(`${ringStyle.name} of the ${name}`, health+ringStyle.health, damage+ringStyle.damage, speed+ringStyle.speed, grade)
+            break;
+        default:
+            window.alert("dis shit broke")
     }
-    window.alert("enem")
     return res
 }
 //create moves
@@ -170,7 +216,7 @@ function loadDungeon(){
 }
 function playerTurn(){
     document.getElementById("character-stats").textContent = `Health: ${health} Speed: ${speed} Level: ${level}`
-    if (health < 0) death()
+    if (health < 1) death()
     setMenu()
     document.getElementById("ui-text").classList.add("hidden")
     var d = document.getElementById("character-moves")
@@ -178,7 +224,7 @@ function playerTurn(){
 }
 async function enemyTurn(){
     document.getElementById("enemy-stats").textContent = `Health: ${enemyHealth} Speed: ${enemySpeed} Level: ${enemyLevel}`
-    if (enemyHealth < 0) victory()
+    if (enemyHealth < 1) victory()
     var enemyInfo = moveGenerator()
     document.getElementById("ui-text").textContent = (`${document.getElementById("enemy-name").textContent} uses ${enemyInfo.name}, dealing ${enemyInfo.damage}!`)
     health -= enemyInfo.damage
@@ -204,16 +250,24 @@ function retreat(){
 
 //drop system
 function dropTable(){
-    document.getElementById("drop-table").classList.remove("hidden")
+    document.getElementById("drop-table-parent").classList.remove("hidden")
     document.getElementById("victory").classList.add("hidden")
     count = random(3)
-    window.alert(count)
     for(var i = 0; i < count; i++){
-        drops.push(enemyDrops())
-        window.alert("drops[i]")
+        drops.push(itemGenerator())
     }
     for(var i = 0; i < count; i++){
-        window.alert(drops[i])
+        storage.push(drops[i])
+        let item = document.createElement("tr");
+        item.classList.add("tempData")
+        let dataName = document.createElement("td");
+        dataName.innerHTML = drops[i].name
+        let dataGrade = document.createElement("td");
+        dataGrade.innerHTML = drops[i].grade.grade
+        dataGrade.style = `color: ${drops[i].grade.color}`
+        document.getElementById("drop-table").appendChild(item);
+        item.appendChild(dataName)
+        item.appendChild(dataGrade)
     }
 }
 
@@ -224,7 +278,20 @@ function dropTable(){
 
 //CHARACTER SCREEN!!
 
-
+function addToInventory(){
+    for(var i = storage.length-1; i > 0; i--){
+        let item = document.createElement("tr");
+        item.classList.add("tempData")
+        let dataName = document.createElement("td");
+        dataName.innerHTML = drops[i].name
+        let dataGrade = document.createElement("td");
+        dataGrade.innerHTML = storage[i].grade.grade
+        dataGrade.style = `color: ${storage[i].grade.color}`
+        document.getElementById("inventory-table").appendChild(item);
+        item.appendChild(dataName)
+        item.appendChild(dataGrade)
+    }
+}
 
 
 
@@ -237,18 +304,6 @@ class sword{
        this.grade = grade
        this.name = name
     }
-    get damage(){
-        return damage
-    }
-    get speed(){
-        return speed
-    }
-    get health(){
-        return 0
-    }
-    get defense(){
-        return 0
-    }
 }
 
 class armour{
@@ -257,12 +312,6 @@ class armour{
        this.speed = speed
        this.grade = grade
        this.name = name
-    }
-    get health(){
-        return health
-    }
-    get speed(){
-        return speed
     }
 }
 
@@ -273,15 +322,6 @@ class ring{
        this.damage = damage
        this.grade = grade
        this.name = name
-    }
-    get health(){
-        return health
-    }
-    get speed(){
-        return speed
-    }
-    get damage(){
-        return damage
     }
 }
 

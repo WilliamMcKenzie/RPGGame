@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="dungeonstyle.css">
+        <link rel="stylesheet" href="marketstyle.css">
+        <link rel="stylesheet" href="characterstyle.css">
+
+        <link rel="stylesheet" href="homestyle.css">
         <meta name="viewport" content="device.width, initial-scale=1.0">
         <meta charset="utf-8">  
         <title>Text_RPG</title>>
     </head>
     <body>
         <div class="menu" id="menu">
-            <button class="menu-content" onclick="generator()" id="dungeon-button">Dungeon</button>
-            <button class="menu-content">Market</button>
-            <button class="menu-content">Character</button>
+            <input type="image" src="https://cdn-icons-png.flaticon.com/512/2014/2014307.png" id="dungeon-button" onclick="generator()"/>
+            <input type="image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Store_Building_Flat_Icon_Vector.svg/1024px-Store_Building_Flat_Icon_Vector.svg.png" id="market-button" onclick="generator()"/>
+            <input type="image" src="https://png.pngtree.com/png-vector/20220704/ourmid/pngtree-knight-helmet-png-image_5684874.png" id="character-button" onclick="addToInventory()"/>
         </div>
         <div>
             <div id="dungeon-div" class="hidden">
@@ -19,24 +23,20 @@
                     <h1 id="enemy-stats"></h1>
                 </div>
                 <div id="victory" class="hidden">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1907/1907867.png" style="scale: 100%">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1907/1907867.png" style="scale: 100%;">
                     <div style="font-size:80px; color:#E0B23B; font-weight: bold;" id="victory-header">VICTORY</div>
                     <button class="continue" onclick="dropTable()">Continue</button>
                 </div>
-                <div id="drop-table" class="drop-table-parent hidden">
-                    <table class="drop-table">
-                        <caption>Drops</caption>
+                <div id="drop-table-parent" class="hidden">
+                    <table id="drop-table" >
+                        <caption style="padding: 20px; font-size: 60px; color:#E0B23B;">DROPS:</caption>
+                        <img src="https://cdn-icons-png.flaticon.com/512/1355/1355900.png" style="scale: 60%;">
                         <tr>
-                            <th>Item</th>
-                            <th>Rank</th>
-                            <th>Type</th>
+                            <th style="color:#ADBDBF">Item:</th>
+                            <th style="color:#ADBDBF">Rank:</th>
                         </tr>
-                        <tr>
-                            <td>Eve</td>
-                            <td>Jackson</td>
-                            <td>94</td>
-                          </tr>
                     </table>
+                    <button class="continue" onclick="home()">Continue</button>
                 </div>
                 <div id="death" class="hidden">
                     
@@ -55,11 +55,19 @@
             </div>
         </div>
         <div class="hidden" id="overlay"></div>
-        <div class="market">
+        <div class="market hidden" id="market">
 
         </div>
-        <div class="character">
-
+        <div class="character hidden" id="character">
+            
+            <div id="inventory">
+                <table id="inventory-table" >
+                    <tr>
+                        <th style="color:#ADBDBF">Item:</th>
+                        <th style="color:#ADBDBF">Rank:</th>
+                    </tr>
+                </table>
+            </div>
         </div>
         <script src="script.js"></script>
     </body>
