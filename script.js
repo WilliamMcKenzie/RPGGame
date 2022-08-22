@@ -19,27 +19,42 @@ var storage = []
 var equipped = {}
 
 window.onbeforeunload = function() { return "Your progress will be lost."; };
-function enemyDamageCalc(){
-    var minDamage = 5 + enemyLevel*2, maxDamage = 5 + enemyLevel*4
+//for enemies
+function enemyDamageCalc(level){
+    var minDamage = 5 + level*2, maxDamage = 5 + level*4
     var enemyDamage = Math.floor(Math.random() * (maxDamage - minDamage + 1) + minDamage)
     return enemyDamage
 }
-function enemyHealthCalc(){
-    var minHealth = 20 + enemyLevel*5, maxHealth = 20 + enemyLevel*10
+function enemyHealthCalc(level){
+    var minHealth = 20 + level*5, maxHealth = 20 + level*10
     enemyHealth = Math.floor(Math.random() * (maxHealth - minHealth + 1) + minHealth)
     return enemyHealth
 }
-function enemySpeedCalc(){
-    var minSpeed = 10 + enemyLevel*3, maxSpeed = 10 + enemyLevel*5
+function enemySpeedCalc(level){
+    var minSpeed = 10 + level*3, maxSpeed = 10 + level*5
     enemySpeed = Math.floor(Math.random() * (maxSpeed - minSpeed + 1) + minSpeed)
     return enemySpeed
 }
+//for weapons
+function damageCalc(level){
+    var damage = Math.floor(((5 + level*2) + (5 + level*4))/2)
+    return damage
+}
+function healthCalc(level){
+    var health = Math.floor(((20 + level*5) + (20 + level*10))/2)
+    return health
+}
+function speedCalc(level){
+    var speed = Math.floor(((10 + level*3) + (10 + level*5))/2)
+    return speed
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 function moveGenerator(){
     //get damage
-    var enemyDamage = enemyDamageCalc()
+    var enemyDamage = enemyDamageCalc(enemyLevel)
     //get name
     var moves = ["Juicers Demise","Megamind","Laxative Beam","Small Forward","Megabalista","Devastation Lazer","Ravana","Burial","Sacrilige","Stompinater"]
     var moveName = moves[Math.floor(Math.random() * moves.length)]
@@ -108,6 +123,7 @@ function home(){
     document.getElementById("dungeon-div").classList.add("hidden")
     document.getElementById("market").classList.add("hidden")
     document.getElementById("character").classList.add("hidden")
+    clearInventory()
     document.getElementById("overlay").classList.add("hidden")
 
     document.getElementById("victory").classList.add("hidden")
@@ -115,6 +131,7 @@ function home(){
     document.getElementById("death").classList.add("hidden") 
     document.getElementById("menu").classList.remove("hidden")
     //dungeon
+    if(document.getElementById("character-moves").childElementCount > 1)
     for(var i = 0; i < moves.length; i++){
         document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild) 
     }
@@ -132,8 +149,8 @@ function generator(){
 
     //gen enemy
     enemyLevel = Math.floor((Math.random() * level) + 1)
-    enemyHealth = enemyHealthCalc()
-    enemySpeed= enemySpeedCalc()
+    enemyHealth = enemyHealthCalc(enemyLevel)
+    enemySpeed= enemySpeedCalc(enemyLevel)
 
     //possible names
     var enemyName = randomName()
@@ -152,9 +169,9 @@ function generator(){
 function itemGenerator(){
     
     var style = random(4)-1
-    var swordStyles = [{name:"Shank", damage:10, speed:5},{name:"Blade", damage:5, speed:0},{name:"Claymore", damage:10, speed:-5},{name:"Daggers", damage:0, speed:5}]
-    var armourStyles = [{name:"Cardboard Box", health:15, speed:-6},{name:"Platemail", health:10, speed:0},{name:"Chainmail", health:20, speed:-5},{name:"Leather", health:0, speed:5}]
-    var ringStyles = [{name:"Shaman Mask", health:5, damage:2, speed:2},{name:"Necklace", health:5, damage:2, speed:2},{name:"Ring", health:2, damage:1, speed:6},{name:"Gauntlets", health:20, damage:-3, speed:-6}]
+    var swordStyles = [{name:"Sabre", damage:3, speed:3},{name:"Blade", damage:5, speed:0},{name:"Claymore", damage:10, speed:-5},{name:"Daggers", damage:0, speed:5}]
+    var armourStyles = [{name:"Cloth Armour", health:-5, speed:10},{name:"Platemail", health:10, speed:0},{name:"Chainmail", health:20, speed:-5},{name:"Leather", health:0, speed:5}]
+    var ringStyles = [{name:"Mask", health:0, damage:5, speed:2},{name:"Necklace", health:5, damage:2, speed:2},{name:"Ring", health:2, damage:1, speed:6},{name:"Gauntlets", health:20, damage:-3, speed:-6}]
 
     var swordStyle = swordStyles[style]
     var armourStyle = armourStyles[style]
@@ -165,9 +182,9 @@ function itemGenerator(){
     var grade = gradeCalc()
     var num = random(3)
     
-    var damage = enemyDamageCalc() 
-    var health = enemyHealthCalc() 
-    var speed = enemySpeedCalc() 
+    var damage = damageCalc(enemyLevel) 
+    var health = healthCalc(enemyLevel) 
+    var speed = speedCalc(enemyLevel) 
     
     damage = damage/2 + Math.floor(gradeStatVal(grade)/2)
     health = health/2 + gradeStatVal(grade)
@@ -176,13 +193,13 @@ function itemGenerator(){
     var res 
     switch(num){
         case 1:
-            res = new sword(`${swordStyle.name} of the ${name}`, damage+swordStyle.damage, speed+swordStyle.speed, grade)
+            res = new Sword(`${swordStyle.name} of the ${name}`, damage+swordStyle.damage, speed+swordStyle.speed, grade, enemyLevel)
             break;
         case 2:
-            res = new armour(`${armourStyle.name} of the ${name}`, health+armourStyle.health, speed+armourStyle.speed, grade)
+            res = new Armour(`${armourStyle.name} of the ${name}`, health+armourStyle.health, speed+armourStyle.speed, grade, enemyLevel)
             break;
         case 3:
-            res = new ring(`${ringStyle.name} of the ${name}`, health+ringStyle.health, damage+ringStyle.damage, speed+ringStyle.speed, grade)
+            res = new Ring(`${ringStyle.name} of the ${name}`, health+ringStyle.health, damage+ringStyle.damage, speed+ringStyle.speed, grade, enemyLevel)
             break;
         default:
             window.alert("dis shit broke")
@@ -316,9 +333,31 @@ function addToInventory(){
 
         item.classList.add("tempData")
         //name
-        let dataName = document.createElement("td");
-        dataName.innerHTML = storage[i].name
+        let dataNameParent = document.createElement("td");
+        let dataName = document.createElement("input");
+        dataName.type = "button"
+        dataName.value = storage[i].name
         dataName.id = i
+        dataName.classList.add("inventoryItemName")
+        dataName.onclick = function openModal(){
+            document.getElementById("item-view").classList.remove("hidden")
+            document.getElementById("overlay").classList.remove("hidden")
+            var item = storage[dataName.id]
+            var modalName = document.getElementById("item-modal-name")
+            var modalRank = document.getElementById("item-modal-rank")
+            var modalType = document.getElementById("item-modal-type")
+            var modalLevel = document.getElementById("item-modal-level")
+            modalName.innerHTML = item.name
+            modalRank.innerHTML = item.grade.grade
+            modalRank.style=`color: ${item.grade.color}`
+            modalType.innerHTML = item.constructor.name
+            modalLevel.innerHTML = item.level
+
+            modalName.style="color: #5C6667; font-size: 38px;"
+            modalType.style ="color: #5C6667; font-size: 38px;"
+            modalLevel.style ="color: #5C6667; font-size: 38px;"
+        }
+
         //grade
         if(storage[i].grade.grade === "???"){
             dataName.style=`color: ${storage[i].grade.color}`
@@ -343,44 +382,58 @@ function addToInventory(){
         }   
         //add them
         document.getElementById("inventory-table").appendChild(item);
-        item.appendChild(dataName)
+        item.appendChild(dataNameParent)
+        dataNameParent.appendChild(dataName)
         item.appendChild(dataGrade)
         document.getElementById("delete-button-table").appendChild(deleteItem);
         deleteItem.appendChild(dataDeleteParent)
         dataDeleteParent.appendChild(dataDelete)
     }
 }
+function clearInventory(){
+    var table = document.getElementById("delete-button-table")
+    while(table.childElementCount > 0){
+        table.removeChild(table.lastElementChild)
+    }
+}
+
+function closeModal(){
+    
+}
 
 
 
 
 
 
-class sword{
-    constructor(name, damage, speed, grade){
+class Sword{
+    constructor(name, damage, speed, grade, level){
        this.damage = damage 
        this.speed = speed
        this.grade = grade
        this.name = name
+       this.level = level
     }
 }
 
-class armour{
-    constructor(name, health, speed, grade){
+class Armour{
+    constructor(name, health, speed, grade, level){
        this.health = health
        this.speed = speed
        this.grade = grade
        this.name = name
+       this.level = level
     }
 }
 
-class ring{
-    constructor(name, health, speed, damage, grade){
+class Ring{
+    constructor(name, health, speed, damage, grade,level){
        this.health = health
        this.speed = speed
        this.damage = damage
        this.grade = grade
        this.name = name
+       this.level = level
     }
 }
 

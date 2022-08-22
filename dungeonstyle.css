@@ -37,6 +37,16 @@ body {
 
 }
 
+#menu-background {
+    position: absolute;
+    top: 70%;
+    left: 49.5%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    height: 200px;
+    width: 900px;
+}
+
 .character {
     z-index: 8;
     position: absolute;
@@ -46,9 +56,13 @@ body {
 }
 
 #dungeon-button {
-    height: 40%; 
-    width: 9%; 
-    object-position: -20px -20px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+    height: auto; 
+    width: auto; 
+    max-width: 8%; 
+    max-height: 8%;
+
 }
 #market-button {
     height: auto; 
@@ -71,8 +85,8 @@ body {
     max-height: 13%;
 }
 #dungeon-button:hover {
-    width: 9.5%; 
-    height: 9.5%;
+    max-width: 8.5%; 
+    max-height: 8.5%;
 }
 
 .dungeon {
