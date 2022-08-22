@@ -110,16 +110,16 @@ function home(){
     document.getElementById("character").classList.add("hidden")
     document.getElementById("overlay").classList.add("hidden")
 
-    //dungeon 
     document.getElementById("victory").classList.add("hidden")
     document.getElementById("drop-table-parent").classList.add("hidden")
-    document.getElementById("death").classList.add("hidden")
+    document.getElementById("death").classList.add("hidden") 
+    document.getElementById("menu").classList.remove("hidden")
+    //dungeon
     for(var i = 0; i < moves.length; i++){
-        document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild)
+        document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild) 
     }
     drops=[]
     removeElementsByClass("tempData")
-    document.getElementById("menu").classList.remove("hidden")
 }
 
 
@@ -165,14 +165,14 @@ function itemGenerator(){
     var grade = gradeCalc()
     var num = random(3)
     
-    var damage = enemyDamageCalc()
-    var health = enemyHealthCalc()
-    var speed = enemySpeedCalc()
+    var damage = enemyDamageCalc() 
+    var health = enemyHealthCalc() 
+    var speed = enemySpeedCalc() 
     
-    damage = damage/2
-    health = health/2
-    speed = speed/2
-
+    damage = damage/2 + Math.floor(gradeStatVal(grade)/2)
+    health = health/2 + gradeStatVal(grade)
+    speed = speed/2 + Math.floor(gradeStatVal(grade)/2)
+    
     var res 
     switch(num){
         case 1:
@@ -188,6 +188,31 @@ function itemGenerator(){
             window.alert("dis shit broke")
     }
     return res
+}
+
+function gradeStatVal(grade){
+    switch(grade){
+        case "FF":
+            return 1
+        case "F":
+            return 2
+        case "D":
+            return 3
+        case "C":
+            return 4
+        case "B":
+            return 5
+        case "A":
+            return 6
+        case "S":
+            return 7
+        case "SS":
+            return 8
+        case "???":
+            return 10
+        default:
+            return "poopu bumsqueaks"
+    }
 }
 //create moves
 function loadDungeon(){
@@ -277,21 +302,55 @@ function dropTable(){
 
 
 //CHARACTER SCREEN!!
+function characterInfo(){
+    document.getElementById("character").classList.remove("hidden")
+    document.getElementById("menu").classList.add("hidden")
+    addToInventory()
+}
 
 function addToInventory(){
-    for(var i = storage.length-1; i > 0; i--){
+    document.getElementById("inventory").classList.remove("hidden")
+    for(var i = 0; i < storage.length; i++){
         let item = document.createElement("tr");
+        let deleteItem = document.createElement("tr");
+
         item.classList.add("tempData")
+        //name
         let dataName = document.createElement("td");
-        dataName.innerHTML = drops[i].name
+        dataName.innerHTML = storage[i].name
+        dataName.id = i
+        //grade
+        if(storage[i].grade.grade === "???"){
+            dataName.style=`color: ${storage[i].grade.color}`
+        }
         let dataGrade = document.createElement("td");
         dataGrade.innerHTML = storage[i].grade.grade
         dataGrade.style = `color: ${storage[i].grade.color}`
+        //delete button
+        let dataDeleteParent = document.createElement("td");
+        let dataDelete = document.createElement("input");
+        dataDelete.type = "button"
+        dataDelete.value = "X"
+
+        dataDelete.id="deleteButton"
+
+        dataDelete.onclick = function deleteRow() {
+            var p=dataDelete.parentNode.parentNode;
+            var d=dataGrade.parentNode;
+            p.parentNode.removeChild(p);
+            d.parentNode.removeChild(d);
+            storage.splice(parseInt(dataName.id),1)
+        }   
+        //add them
         document.getElementById("inventory-table").appendChild(item);
         item.appendChild(dataName)
         item.appendChild(dataGrade)
+        document.getElementById("delete-button-table").appendChild(deleteItem);
+        deleteItem.appendChild(dataDeleteParent)
+        dataDeleteParent.appendChild(dataDelete)
     }
 }
+
 
 
 

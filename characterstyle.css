@@ -1,0 +1,51 @@
+#inventory-table {
+    display: inline-block;
+    color: var(--text);
+    font-family: 'Trebuchet MS';
+    font-weight: bold;
+    font-size: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 10px solid var(--bordercolor);
+    border-radius: 50px;
+    background-color: aliceblue;
+    border-collapse: collapse;
+}
+
+.tempData {
+  border: 5px solid var(--bordercolor);
+}
+
+#deleteButton{
+    padding-left:20px; 
+    padding-right:20px; 
+    padding-top:6px; 
+    padding-bottom:6px;
+    font-size:25px;
+    border-radius:10px;
+    border:5px solid #ADBDBF;
+    font-weight: 700;
+    color: #5C6667;
+    background-color: aliceblue;
+}
+#deleteButton:hover {
+    transform: scale(1.05);
+    cursor: grab;
+}
+#deleteButton:active {
+    transform: scale(0.98);
+    cursor: grabbing;
+}
+
+#item-table {
+    display: inline-block;
+    color: var(--text);
+    font-family: 'Trebuchet MS';
+    font-weight: bold;
+    font-size: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 10px solid var(--bordercolor);
+    border-radius: 50px;
+    background-color: aliceblue;
+}

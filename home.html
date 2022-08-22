@@ -14,7 +14,7 @@
         <div class="menu" id="menu">
             <input type="image" src="https://cdn-icons-png.flaticon.com/512/2014/2014307.png" id="dungeon-button" onclick="generator()"/>
             <input type="image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Store_Building_Flat_Icon_Vector.svg/1024px-Store_Building_Flat_Icon_Vector.svg.png" id="market-button" onclick="generator()"/>
-            <input type="image" src="https://png.pngtree.com/png-vector/20220704/ourmid/pngtree-knight-helmet-png-image_5684874.png" id="character-button" onclick="addToInventory()"/>
+            <input type="image" src="https://png.pngtree.com/png-vector/20220704/ourmid/pngtree-knight-helmet-png-image_5684874.png" id="character-button" onclick="characterInfo()"/>
         </div>
         <div>
             <div id="dungeon-div" class="hidden">
@@ -59,12 +59,23 @@
 
         </div>
         <div class="character hidden" id="character">
-            
-            <div id="inventory">
+            <div id="inventory" class="hidden">
                 <table id="inventory-table" >
                     <tr>
                         <th style="color:#ADBDBF">Item:</th>
                         <th style="color:#ADBDBF">Rank:</th>
+                    </tr>
+                </table>
+                <button onclick="home()">Back</button>
+                <table id="delete-button-table" style="display: inline-block;"></table>
+            </div>
+            <div id="item-view">
+                <table id="item-table" >
+                    <tr>
+                        <th style="color:#ADBDBF">Item:</th>
+                        <th style="color:#ADBDBF">Rank:</th>
+                        <th style="color:#ADBDBF">Type:</th>
+                        <th style="color:#ADBDBF">Level:</th>
                     </tr>
                 </table>
             </div>
