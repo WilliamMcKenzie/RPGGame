@@ -72,37 +72,62 @@ function removeElementsByClass(className){
     }
 }
 function gradeCalc(){
-    var rnd = random(75)
+    var rnd = random(1000)
     var res = {grade:"FF",color:"#AFAFAF"}
     switch(true){
-        case (rnd < 30):
+        case (rnd < 200):
             res= {grade:"F",color:"#838484"}
             break;
-        case (rnd < 40):
+        case (rnd < 400):
             res= {grade:"D",color:"#405266"}  
             break; 
-        case (rnd < 50):
+        case (rnd < 530):
             res= {grade:"C",color:"#226C71"}  
             break;
-        case (rnd < 60):
+        case (rnd < 720):
             res= {grade:"B",color:"#23A388"}  
             break;
-        case (rnd < 65):
+        case (rnd < 850):
             res= {grade:"A",color:"#85B728"}  
             break;
-        case (rnd < 70):
+        case (rnd < 900):
             res= {grade:"S",color:"#C7A000"}  
             break;
-        case (rnd < 72):
+        case (rnd < 940):
             res= {grade:"SS",color:"#C74000"}  
             break;
-         case (rnd < 73):
+         case (rnd < 970):
             res= {grade:"???",color:"#841799"}  
             break;
         default:
             break;
     }
     return res
+}
+function gradeStatVal(grade){
+    var res = 0
+    switch(grade){
+        case "FF":
+            return res++
+        case "F":
+            return res+2
+        case "D":
+            return res+3
+        case "C":
+            return res+4
+        case "B":
+            return res+5
+        case "A":
+            return res+6
+        case "S":
+            return res+7
+        case "SS":
+            return res+8
+        case "???":
+            return res+10
+        default:
+            return "poopu bumsqueaks"
+    }
 }
 function setMenu(){
     var ui = document.getElementById("ui").style
@@ -115,6 +140,11 @@ function setMenu(){
 }
 function randomName(){
     var enemies = ["Man with a Sock","Soggy Juicer" ,"Werewolf","Goblin","Hobgoblin","Mole King","Molanoid","E.T.","Son of Yazanahar","Grotesque Guardian","Techno-tron","Silicon Baby","Red Champion"]
+    var res = enemies[Math.floor(Math.random() * enemies.length)]
+    return res
+}
+function advancedRandomName(){
+    var enemies = ["Paragon","Exuvia","Primordial King","Colossus","Cyclops","Dragon","Griffin","Loch Ness Monster","Spinosaurous"]
     var res = enemies[Math.floor(Math.random() * enemies.length)]
     return res
 }
@@ -166,34 +196,47 @@ function generator(){
     loadDungeon()
 }
 
-function itemGenerator(){
-    
-    var style = random(4)-1
-    var swordStyles = [{name:"Sabre", damage:3, speed:3},{name:"Blade", damage:5, speed:0},{name:"Claymore", damage:10, speed:-5},{name:"Daggers", damage:0, speed:5}]
-    var armourStyles = [{name:"Cloth Armour", health:-5, speed:10},{name:"Platemail", health:10, speed:0},{name:"Chainmail", health:20, speed:-5},{name:"Leather", health:0, speed:5}]
-    var ringStyles = [{name:"Mask", health:0, damage:5, speed:2},{name:"Necklace", health:5, damage:2, speed:2},{name:"Ring", health:2, damage:1, speed:6},{name:"Gauntlets", health:20, damage:-3, speed:-6}]
 
-    var swordStyle = swordStyles[style]
+function itemGenerator(){
+    var grade = gradeCalc()
+    var gradeVal = gradeStatVal(grade.grade)
+    var name 
+
+    var style = random(3)-1
+    if(gradeVal > 5){
+        var weaponStyles = [{name:"Sabre", damage:15, speed:5},{name:"Katana", damage:25, speed:0},{name:"Cutless", damage:5, speed:10}]
+        var armourStyles = [{name:"Studded Leather", health:40, speed:5},{name:"Breastplate", health:65, speed:-5},{name:"Cloak", health:20, speed:10}]
+        var ringStyles = [{name:"Atlas", health:10, damage:5, speed:4},{name:"Inscription", health:4, damage:2, speed:12},{name:"Grimoire", health:40, damage:-6, speed:-12}]
+
+        name = advancedRandomName()
+    }
+    else{
+        var weaponStyles = [{name:"Blade", damage:5, speed:0},{name:"Claymore", damage:10, speed:-5},{name:"Daggers", damage:0, speed:5}]
+        var armourStyles = [{name:"Platemail", health:20, speed:0},{name:"Chainmail", health:40, speed:-10},{name:"Leather", health:10, speed:5}]
+        var ringStyles = [{name:"Necklace", health:5, damage:2, speed:2},{name:"Ring", health:2, damage:1, speed:6},{name:"Gauntlets", health:20, damage:-3, speed:-6}]
+
+        name = randomName()
+    }
+
+    var weaponStyle = weaponStyles[style]
     var armourStyle = armourStyles[style]
     var ringStyle = ringStyles[style]
 
-    var name = randomName()
-
-    var grade = gradeCalc()
     var num = random(3)
     
-    var damage = damageCalc(enemyLevel) 
+    var damage = Math.floor(damageCalc(enemyLevel)/2)
     var health = healthCalc(enemyLevel) 
-    var speed = speedCalc(enemyLevel) 
+    var speed = Math.floor(speedCalc(enemyLevel)/2)
+    var bonus = gradeStatVal(grade.grade)
     
-    damage = damage/2 + Math.floor(gradeStatVal(grade)/2)
-    health = health/2 + gradeStatVal(grade)
-    speed = speed/2 + Math.floor(gradeStatVal(grade)/2)
+    damage = Math.floor(damage/2 + bonus/2)
+    health = health + bonus
+    speed = Math.floor(speed/2 + bonus/2)
     
     var res 
     switch(num){
         case 1:
-            res = new Sword(`${swordStyle.name} of the ${name}`, damage+swordStyle.damage, speed+swordStyle.speed, grade, enemyLevel)
+            res = new Weapon(`${weaponStyle.name} of the ${name}`, damage+weaponStyle.damage, speed+weaponStyle.speed, grade, enemyLevel)
             break;
         case 2:
             res = new Armour(`${armourStyle.name} of the ${name}`, health+armourStyle.health, speed+armourStyle.speed, grade, enemyLevel)
@@ -207,30 +250,6 @@ function itemGenerator(){
     return res
 }
 
-function gradeStatVal(grade){
-    switch(grade){
-        case "FF":
-            return 1
-        case "F":
-            return 2
-        case "D":
-            return 3
-        case "C":
-            return 4
-        case "B":
-            return 5
-        case "A":
-            return 6
-        case "S":
-            return 7
-        case "SS":
-            return 8
-        case "???":
-            return 10
-        default:
-            return "poopu bumsqueaks"
-    }
-}
 //create moves
 function loadDungeon(){
     var uiText = document.getElementById("ui-text")
@@ -298,6 +317,7 @@ function dropTable(){
     for(var i = 0; i < count; i++){
         drops.push(itemGenerator())
     }
+    console.log(drops)
     for(var i = 0; i < count; i++){
         storage.push(drops[i])
         let item = document.createElement("tr");
@@ -330,7 +350,6 @@ function addToInventory(){
     for(var i = 0; i < storage.length; i++){
         let item = document.createElement("tr");
         let deleteItem = document.createElement("tr");
-
         item.classList.add("tempData")
         //name
         let dataNameParent = document.createElement("td");
@@ -342,6 +361,7 @@ function addToInventory(){
         dataName.onclick = function openModal(){
             document.getElementById("item-view").classList.remove("hidden")
             document.getElementById("overlay").classList.remove("hidden")
+            //SET 1
             var item = storage[dataName.id]
             var modalName = document.getElementById("item-modal-name")
             var modalRank = document.getElementById("item-modal-rank")
@@ -349,13 +369,36 @@ function addToInventory(){
             var modalLevel = document.getElementById("item-modal-level")
             modalName.innerHTML = item.name
             modalRank.innerHTML = item.grade.grade
-            modalRank.style=`color: ${item.grade.color}`
+            modalRank.style=`color: ${item.grade.color};`
             modalType.innerHTML = item.constructor.name
             modalLevel.innerHTML = item.level
 
             modalName.style="color: #5C6667; font-size: 38px;"
             modalType.style ="color: #5C6667; font-size: 38px;"
             modalLevel.style ="color: #5C6667; font-size: 38px;"
+
+            //SET2
+            var modalDamage = document.getElementById("item-modal-damage")
+            var modalHealth = document.getElementById("item-modal-health")
+            var modalSpeed = document.getElementById("item-modal-speed")
+            if("damage" in item){
+                modalDamage.innerHTML = item.damage 
+                modalDamage.style=`font-size: ${50+item.damage/2}px`
+                document.getElementById("damage-label").classList.remove("hidden")
+            }
+            if("health" in item){
+                modalHealth.innerHTML = item.health
+                modalHealth.style=`font-size: ${50+item.health/2}px`
+                document.getElementById("health-label").classList.remove("hidden")
+            }
+            modalSpeed.innerHTML = item.speed
+            modalSpeed.style=`font-size: ${50+item.speed/2}px`
+            if(item.grade.grade==="???"){
+                document.getElementById("itme-model").style="background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(132,23,153,1) 49%, rgba(0,212,255,1) 100%);"
+            }
+            else{
+                document.getElementById("itme-model").style="background-color:background: aliceblue;"
+            }
         }
 
         //grade
@@ -398,7 +441,7 @@ function clearInventory(){
 }
 
 function closeModal(){
-    
+
 }
 
 
@@ -406,7 +449,7 @@ function closeModal(){
 
 
 
-class Sword{
+class Weapon{
     constructor(name, damage, speed, grade, level){
        this.damage = damage 
        this.speed = speed

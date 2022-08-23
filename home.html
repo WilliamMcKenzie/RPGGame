@@ -12,7 +12,7 @@
     </head>
     <body>
         <div class="menu" id="menu">
-            <input type="image" src="https://cdn-icons-png.flaticon.com/512/3898/3898581.png" id="dungeon-button" onclick="generator()"/>
+            <input type="image" src="https://cdn-icons-png.flaticon.com/512/2014/2014307.png" id="dungeon-button" onclick="generator()"/>
             <input type="image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Store_Building_Flat_Icon_Vector.svg/1024px-Store_Building_Flat_Icon_Vector.svg.png" id="market-button" onclick="generator()"/>
             <input type="image" src="https://png.pngtree.com/png-vector/20220704/ourmid/pngtree-knight-helmet-png-image_5684874.png" id="character-button" onclick="characterInfo()"/>
             <img id="menu-background" src="https://beartoothgrill.net/wp-content/uploads/2016/11/Half-half-circle-lightgreen.png">
@@ -31,13 +31,15 @@
                 <div id="drop-table-parent" class="hidden">
                     <table id="drop-table" >
                         <caption style="padding: 20px; font-size: 60px; color:#E0B23B;">DROPS:</caption>
-                        <img src="https://cdn-icons-png.flaticon.com/512/1355/1355900.png" style="scale: 60%;">
                         <tr>
                             <th style="color:#ADBDBF">Item:</th>
                             <th style="color:#ADBDBF">Rank:</th>
                         </tr>
                     </table>
-                    <button class="continue" onclick="home()">Continue</button>
+                    <button class="continue" onclick="home()" style="margin-right: 100px;" style="float: right;">Continue</button>
+                </div>
+                <div style="position: absolute; z-index: 10;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1355/1355900.png" style="scale: 60%; position: fixed; bottom: 1111px;">
                 </div>
                 <div id="death" class="hidden">
                     
@@ -73,16 +75,26 @@
         </div>
         <div id="item-view" class="hidden item-view" style="position: absolute; z-index: 10;">
             <div id="item-modal">
-                    <label for="item-modal-name" style="color:#ADBDBF; padding-top: 30px; padding-bottom: 30px; font-style: italic;" class="modal-label">Item:</th>
-                    <div id="item-modal-name" class="modal-text"></div>
-                    <label style="color:#ADBDBF; font-style: italic;" class="modal-label">Rank:</th>
-                    <div id="item-modal-rank" class="modal-text"></div>
-                    <label style="color:#ADBDBF; font-style: italic;" class="modal-label">Type:</th>
-                    <div id="item-modal-type" class="modal-text"></div>
-                    <label style="color:#ADBDBF; font-style: italic;" class="modal-label">Level:</th>
-                    <div id="item-modal-level" class="modal-text"></div>
-                    <button class="upgrade-button">Upgrade</button>
-                    <button onclick="closeModal()" class="closeModal">&times;</button>
+                <div id="item-modal-header">
+                        <label for="item-modal-name" style="color:#ADBDBF; padding-top: 30px; padding-bottom: 30px; font-style: italic;" class="modal-label">Item</th>
+                        <div id="item-modal-name" class="modal-text"></div>
+                        <label for="item-modal-rank" style="color:#ADBDBF; font-style: italic;" class="modal-label">Rank</label>
+                        <div id="item-modal-rank" class="modal-text"></div>
+                        <label for="item-modal-type" style="color:#ADBDBF; font-style: italic;" class="modal-label">Type</label>
+                        <div id="item-modal-type" class="modal-text"></div>
+                        <label for="item-modal-level" style="color:#ADBDBF; font-style: italic;" class="modal-label">Level</label>
+                        <div id="item-modal-level" class="modal-text"></div>
+                        <button class="upgrade-button">Upgrade</button>
+                        <button onclick="closeModal()" class="closeModal">&times;</button>
+                </div>
+                <div id="item-modal-body">
+                    <label for="item-modal-damage" class="hidden" id="damage-label">Damage</label>
+                    <div id="item-modal-damage" class="modal-stats"></div>
+                    <label for="item-modal-health" class="hidden" id="health-label">Health</label>
+                    <div id="item-modal-health" class="modal-stats"></div>
+                    <label for="item-modal-speed">Speed</label>
+                    <div id="item-modal-speed" class="modal-stats"></div>
+                </div>
             </div>
         </div>
         <script src="script.js"></script>
