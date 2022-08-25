@@ -137,9 +137,29 @@
 }
 
 .upgrade-button {
-    color: aliceblue;
-    background-color: #32BB1F;
+    color: var(--bordercolor);
+    font-size: 25px;
+    font-weight: bold;
+    background-color: aliceblue;
+    border: 5px solid var(--bordercolor);
+    border-radius: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    transition: 1s;
 }
+.upgrade-button:hover {
+    border-color: #32BB1F;
+    color: aliceblue;
+    transform: scale(1.05);
+}
+.upgrade-button:active{
+    background-color: #1d7611;
+    transform: scale(0.90);
+    transition: 0s;
+}
+
+
+
 
 
 .modal-stats {
@@ -158,4 +178,10 @@
 
 #item-modal-speed:hover{
     color: blue;
+}
+
+.back-from-character{
+    position: fixed;
+    bottom:90%;
+    right: 90%;
 }

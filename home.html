@@ -17,6 +17,9 @@
             <input type="image" src="https://png.pngtree.com/png-vector/20220704/ourmid/pngtree-knight-helmet-png-image_5684874.png" id="character-button" onclick="characterInfo()"/>
             <img id="menu-background" src="https://beartoothgrill.net/wp-content/uploads/2016/11/Half-half-circle-lightgreen.png">
         </div>
+        <div class="currency">
+            <div id="gold-count">0</div>
+        </div>
         <div>
             <div id="dungeon-div" class="hidden">
                 <div class="enemy dungeon">
@@ -36,7 +39,7 @@
                             <th style="color:#ADBDBF">Rank:</th>
                         </tr>
                     </table>
-                    <button class="continue" onclick="home()" style="margin-right: 100px;" style="float: right;">Continue</button>
+                    <button class="continue" onclick="home(1)" style="margin-right: 100px;" style="float: right;">Continue</button>
                 </div>
                 <div style="position: absolute; z-index: 10;">
                     <img src="https://cdn-icons-png.flaticon.com/512/1355/1355900.png" style="scale: 60%; position: fixed; bottom: 1111px;">
@@ -69,8 +72,8 @@
                         <th style="color:#ADBDBF">Rank:</th>
                     </tr>
                 </table>
-                <button onclick="home()">Back</button>
                 <table id="delete-button-table" style="display: inline-block;"></table>
+                <button onclick="home(0)" class="back-from-character">Back</button>
             </div>
         </div>
         <div id="item-view" class="hidden item-view" style="position: absolute; z-index: 10;">
@@ -84,7 +87,8 @@
                         <div id="item-modal-type" class="modal-text"></div>
                         <label for="item-modal-level" style="color:#ADBDBF; font-style: italic;" class="modal-label">Level</label>
                         <div id="item-modal-level" class="modal-text"></div>
-                        <button class="upgrade-button">Upgrade</button>
+                        <button onclick="upgradeItem()" class="upgrade-button">Upgrade</button>
+                        <button onclick="equipItem()" class="upgrade-button">Equip</button>
                         <button onclick="closeModal()" class="closeModal">&times;</button>
                 </div>
                 <div id="item-modal-body">

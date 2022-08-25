@@ -5,7 +5,8 @@ var exp = 1
 
 var health = 100
 var damage = 10
-var speed = 40
+var speed = 10 
+var gold = 1000
 
 var enemyLevel
 var enemyHealth
@@ -16,7 +17,15 @@ var drops = []
 var moves = [{name: "Slam", damage: 12},{name: "Slice", damage: 50},{name: "Heal", damage: -50}]
 
 var storage = []
-var equipped = {}
+var equipped = new Map()
+
+var weapon = "weapon"
+var armour = "armour"
+var ring = "ring"
+
+equipped.set(weapon,{name: "Dull Blade", damage: 1, speed: 1, grade: {grade:"FF", color:"#AFAFAF"},level:1}) 
+equipped.set(armour,{name: "Worn Plate", health: 1, speed: 1, grade: {grade:"FF", color:"#AFAFAF"},level: 1}) 
+equipped.set(ring,{name: "Rusted Ring", damage: 1, health: 1, speed: 1, grade: {grade:"FF", color:"#AFAFAF"},level: 1})
 
 window.onbeforeunload = function() { return "Your progress will be lost."; };
 //for enemies
@@ -87,16 +96,16 @@ function gradeCalc(){
         case (rnd < 720):
             res= {grade:"B",color:"#23A388"}  
             break;
-        case (rnd < 850):
+        case (rnd < 870):
             res= {grade:"A",color:"#85B728"}  
             break;
-        case (rnd < 900):
+        case (rnd < 940):
             res= {grade:"S",color:"#C7A000"}  
             break;
-        case (rnd < 940):
+        case (rnd < 970):
             res= {grade:"SS",color:"#C74000"}  
             break;
-         case (rnd < 970):
+        case (rnd < 990):
             res= {grade:"???",color:"#841799"}  
             break;
         default:
@@ -149,7 +158,7 @@ function advancedRandomName(){
     return res
 }
 //go home
-function home(){
+function home(fromDungeon){
     document.getElementById("dungeon-div").classList.add("hidden")
     document.getElementById("market").classList.add("hidden")
     document.getElementById("character").classList.add("hidden")
@@ -166,6 +175,11 @@ function home(){
         document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild) 
     }
     drops=[]
+    if(fromDungeon === 1){
+        damage = damage - equipped.get(weapon).damage - equipped.get(ring).damage
+        health = health - equipped.get(armour).health - equipped.get(ring).health
+        speed = speed - equipped.get(ring).speed - equipped.get(armour).speed + equipped.get(weapon).speed 
+    }
     removeElementsByClass("tempData")
 }
 
@@ -190,12 +204,14 @@ function generator(){
     document.getElementById("enemy-name").textContent = enemyName
 
     //set player content
+    damage = damage + equipped.get(weapon).damage + equipped.get(ring).damage
+    health = health + equipped.get(armour).health + equipped.get(ring).health
+    speed = speed + equipped.get(ring).speed + equipped.get(armour).speed + equipped.get(weapon).speed
     document.getElementById("character-name").textContent = username
     document.getElementById("character-stats").textContent = `Health: ${health} Speed: ${speed} Level: ${level}`
-
+    
     loadDungeon()
 }
-
 
 function itemGenerator(){
     var grade = gradeCalc()
@@ -263,7 +279,7 @@ function loadDungeon(){
         button.classList.add("move")
         button.onclick = async function playerAttack(){
             ui.paddingBottom="50px"
-            var total = (x + damage)+Math.floor(Math.random() * speed/20)
+            var total = (x + damage)+Math.floor(Math.random() * speed/10)
             charMovesEle.classList.add("hidden")
             uiText.classList.remove("hidden")
             uiText.textContent = `You used ${y}, dealing ${total} damage!`
@@ -297,6 +313,8 @@ async function enemyTurn(){
 async function victory(){
     document.getElementById("overlay").classList.remove("hidden")
     document.getElementById("victory").classList.remove("hidden")
+    gold += Math.floor(enemyLevel*(Math.random()*10))
+    document.getElementById("gold-count").innerHTML = gold
 }
 function death(){
 
@@ -307,6 +325,9 @@ function retreat(){
     for(var i = 0; i < moves.length; i++){
         document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild)
     }
+    damage = damage - equipped.get(weapon).damage - equipped.get(ring).damage
+    health = health - equipped.get(armour).health - equipped.get(ring).health
+    speed = speed - equipped.get(ring).speed - equipped.get(armour).speed + equipped.get(weapon).speed
 }
 
 //drop system
@@ -344,7 +365,7 @@ function characterInfo(){
     document.getElementById("menu").classList.add("hidden")
     addToInventory()
 }
-
+//inventory
 function addToInventory(){
     document.getElementById("inventory").classList.remove("hidden")
     for(var i = 0; i < storage.length; i++){
@@ -363,6 +384,7 @@ function addToInventory(){
             document.getElementById("overlay").classList.remove("hidden")
             //SET 1
             var item = storage[dataName.id]
+            document.getElementById("item-modal").name=dataName.id
             var modalName = document.getElementById("item-modal-name")
             var modalRank = document.getElementById("item-modal-rank")
             var modalType = document.getElementById("item-modal-type")
@@ -383,22 +405,32 @@ function addToInventory(){
             var modalSpeed = document.getElementById("item-modal-speed")
             if("damage" in item){
                 modalDamage.innerHTML = item.damage 
-                modalDamage.style=`font-size: ${50+item.damage/2}px`
+                if(modalDamage.style.fontSize < 80){
+                    modalDamage.style=`font-size: ${50+item.damage/2}px`
+                }
                 document.getElementById("damage-label").classList.remove("hidden")
+            }
+            else{
+                document.getElementById("damage-label").classList.add("hidden")
+                modalDamage.classList.add("hidden")
             }
             if("health" in item){
                 modalHealth.innerHTML = item.health
-                modalHealth.style=`font-size: ${50+item.health/2}px`
+                if(modalHealth.style.fontSize < 80){
+                    modalHealth.style=`font-size: ${50+item.health/2}px`
+                }
                 document.getElementById("health-label").classList.remove("hidden")
             }
-            modalSpeed.innerHTML = item.speed
-            modalSpeed.style=`font-size: ${50+item.speed/2}px`
-            if(item.grade.grade==="???"){
-                document.getElementById("itme-model").style="background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(132,23,153,1) 49%, rgba(0,212,255,1) 100%);"
-            }
             else{
-                document.getElementById("itme-model").style="background-color:background: aliceblue;"
+                document.getElementById("health-label").classList.add("hidden")
+                modalHealth.classList.add("hidden")
             }
+            modalSpeed.innerHTML = item.speed
+            if(modalSpeed.style.fontSize < 80){
+                modalSpeed.style=`font-size: ${50+item.speed/2}px`
+            }
+            //upgrade button
+
         }
 
         //grade
@@ -441,9 +473,82 @@ function clearInventory(){
 }
 
 function closeModal(){
-
+    document.getElementById("item-view").classList.add("hidden")
+    document.getElementById("overlay").classList.add("hidden")
 }
 
+function upgradeItem(){
+    var item = storage[document.getElementById("item-modal").name]
+    var itemCost = (item.level*5)*gradeStatVal(item.grade.grade)
+
+    if(gold>=itemCost){
+        var damage = Math.floor(damageCalc(item.level)/2)
+        var health = healthCalc(item.level) 
+        var speed = Math.floor(speedCalc(item.level)/2)
+        const bonus = gradeStatVal(item.grade.grade)
+
+        damage = Math.floor(damage/2 + bonus/2)
+        health = health + bonus
+        speed = Math.floor(speed/2 + bonus/2)
+
+
+        //new stats
+        gold-=itemCost
+        document.getElementById("gold-count").textContent = gold
+        item.level+=1
+        if("damage" in item){
+            item.damage = item.damage - damage
+        }
+        if("health" in item){
+            item.health = item.health - health
+        }
+        item.speed = item.speed - speed
+        document.getElementById("item-modal-level").innerHTML = item.level
+
+        //set stats 
+        var modalDamage = document.getElementById("item-modal-damage")
+        var modalHealth = document.getElementById("item-modal-health")
+        var modalSpeed = document.getElementById("item-modal-speed")
+
+        var newDamage = Math.floor(damageCalc(item.level)/2)
+        var newHealth = healthCalc(item.level) 
+        var newSpeed = Math.floor(speedCalc(item.level)/2)
+
+        newDamage = Math.floor(newDamage/2 + bonus/2)
+        newHealth = newHealth + bonus
+        newSpeed = Math.floor(newSpeed/2 + bonus/2)
+    
+        if("damage" in item){
+            item.damage += newDamage
+            modalDamage.innerHTML = item.damage
+            if(modalDamage.style.fontSize < 80){
+                modalDamage.style=`font-size: ${50+item.damage/2}px`
+            }
+            document.getElementById("damage-label").classList.remove("hidden")
+        }
+        if("health" in item){
+            item.health += newHealth
+            modalHealth.innerHTML = item.health
+            if(modalHealth.style.fontSize < 80){
+                modalHealth.style=`font-size: ${50+item.health/2}px`
+            }
+            document.getElementById("health-label").classList.remove("hidden")
+        }
+
+        item.speed += newSpeed
+        modalSpeed.innerHTML = item.speed
+        if(modalSpeed.style.fontSize < 80){
+            modalSpeed.style=`font-size: ${50+item.speed/2}px`
+        }
+    }
+}
+
+function equipItem(){
+    var item = storage[document.getElementById("item-modal").name]
+    var type = item.constructor.name.toLowerCase()
+    
+    equipped.set(type, item)
+}
 
 
 
