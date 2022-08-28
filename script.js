@@ -1,20 +1,22 @@
 var username = sessionStorage.getItem("username")
 
-var level = 5
+var level = 1
 var exp = 1
 
-var health = 100
+var health = 102
+var maxHealth = 100
 var damage = 10
 var speed = 10 
-var gold = 1000
+var gold = 0
 
 var enemyLevel
 var enemyHealth
+var enemyMaxHealth
 var enemySpeed
 var enemyGrade
 
 var drops = []
-var moves = [{name: "Slam", damage: 12},{name: "Slice", damage: 50},{name: "Heal", damage: -50}]
+var moves = [{name: "Slam", damage: 12}]
 
 var storage = []
 var equipped = new Map()
@@ -26,6 +28,10 @@ var ring = "ring"
 equipped.set(weapon,{name: "Dull Blade", damage: 1, speed: 1, grade: {grade:"FF", color:"#AFAFAF"},level:1}) 
 equipped.set(armour,{name: "Worn Plate", health: 1, speed: 1, grade: {grade:"FF", color:"#AFAFAF"},level: 1}) 
 equipped.set(ring,{name: "Rusted Ring", damage: 1, health: 1, speed: 1, grade: {grade:"FF", color:"#AFAFAF"},level: 1})
+
+//css
+var b = document.querySelector('body');
+
 
 window.onbeforeunload = function() { return "Your progress will be lost."; };
 //for enemies
@@ -148,7 +154,7 @@ function setMenu(){
     }
 }
 function randomName(){
-    var enemies = ["Man with a Sock","Soggy Juicer" ,"Werewolf","Goblin","Hobgoblin","Mole King","Molanoid","E.T.","Son of Yazanahar","Grotesque Guardian","Techno-tron","Silicon Baby","Red Champion"]
+    var enemies = ["Holder of ???","Man with a Sock","Soggy Juicer" ,"Werewolf","Goblin","Hobgoblin","Mole King","Molanoid","E.T.","Son of Yazanahar","Grotesque Guardian","Techno-tron","Silicon Baby","Red Champion"]
     var res = enemies[Math.floor(Math.random() * enemies.length)]
     return res
 }
@@ -177,8 +183,8 @@ function home(fromDungeon){
     drops=[]
     if(fromDungeon === 1){
         damage = damage - equipped.get(weapon).damage - equipped.get(ring).damage
-        health = health - equipped.get(armour).health - equipped.get(ring).health
-        speed = speed - equipped.get(ring).speed - equipped.get(armour).speed + equipped.get(weapon).speed 
+        maxHealth = maxHealth - equipped.get(armour).health - equipped.get(ring).health
+        speed = speed - equipped.get(ring).speed - equipped.get(armour).speed - equipped.get(weapon).speed
     }
     removeElementsByClass("tempData")
 }
@@ -194,6 +200,7 @@ function generator(){
     //gen enemy
     enemyLevel = Math.floor((Math.random() * level) + 1)
     enemyHealth = enemyHealthCalc(enemyLevel)
+    enemyMaxHealth = enemyHealth
     enemySpeed= enemySpeedCalc(enemyLevel)
 
     //possible names
@@ -205,10 +212,10 @@ function generator(){
 
     //set player content
     damage = damage + equipped.get(weapon).damage + equipped.get(ring).damage
-    health = health + equipped.get(armour).health + equipped.get(ring).health
+    maxHealth = maxHealth + equipped.get(armour).health + equipped.get(ring).health
     speed = speed + equipped.get(ring).speed + equipped.get(armour).speed + equipped.get(weapon).speed
     document.getElementById("character-name").textContent = username
-    document.getElementById("character-stats").textContent = `Health: ${health} Speed: ${speed} Level: ${level}`
+    document.getElementById("character-stats").textContent = `Health: ${health}/${maxHealth} Speed: ${speed} Level: ${level}`
     
     loadDungeon()
 }
@@ -292,7 +299,7 @@ function loadDungeon(){
     speed > enemySpeed ? playerTurn() : enemyTurn()
 }
 function playerTurn(){
-    document.getElementById("character-stats").textContent = `Health: ${health} Speed: ${speed} Level: ${level}`
+    document.getElementById("character-stats").textContent = `Health: ${health}/${maxHealth} Speed: ${speed} Level: ${level}`
     if (health < 1) death()
     setMenu()
     document.getElementById("ui-text").classList.add("hidden")
@@ -300,13 +307,15 @@ function playerTurn(){
     d.classList.remove("hidden")
 }
 async function enemyTurn(){
-    document.getElementById("enemy-stats").textContent = `Health: ${enemyHealth} Speed: ${enemySpeed} Level: ${enemyLevel}`
+    document.getElementById("enemy-stats").textContent = `Health: ${enemyHealth}/${enemyMaxHealth} Speed: ${enemySpeed} Level: ${enemyLevel}`
     if (enemyHealth < 1) victory()
-    var enemyInfo = moveGenerator()
-    document.getElementById("ui-text").textContent = (`${document.getElementById("enemy-name").textContent} uses ${enemyInfo.name}, dealing ${enemyInfo.damage}!`)
-    health -= enemyInfo.damage
-    await sleep(2000)
-    playerTurn()
+    else{
+        var enemyInfo = moveGenerator()
+        document.getElementById("ui-text").textContent = (`${document.getElementById("enemy-name").textContent} uses ${enemyInfo.name}, dealing ${enemyInfo.damage}!`)
+        health -= enemyInfo.damage
+        await sleep(2000)
+        playerTurn()
+    }
 }
 
 //possible exit functions
@@ -320,14 +329,16 @@ function death(){
 
 }
 function retreat(){
+    damage = damage - equipped.get(weapon).damage - equipped.get(ring).damage
+    maxHealth = maxHealth - equipped.get(armour).health - equipped.get(ring).health
+    speed = speed - equipped.get(ring).speed - equipped.get(armour).speed - equipped.get(weapon).speed
+
     document.getElementById("menu").classList.remove("hidden")
     document.getElementById("dungeon-div").classList.add("hidden")
     for(var i = 0; i < moves.length; i++){
         document.getElementById("character-moves").removeChild(document.getElementById("character-moves").lastElementChild)
     }
-    damage = damage - equipped.get(weapon).damage - equipped.get(ring).damage
-    health = health - equipped.get(armour).health - equipped.get(ring).health
-    speed = speed - equipped.get(ring).speed - equipped.get(armour).speed + equipped.get(weapon).speed
+    
 }
 
 //drop system
@@ -356,7 +367,14 @@ function dropTable(){
 
 
 //MARKET!!
+function market(){
+    document.getElementById("market").classList.remove("hidden")
+    document.body.style.backgroundImage = "url(https://wallpaperaccess.com/full/255090.jpg) "
+    var menu = document.getElementById("menu")
+    menu.classList.add("hidden")
 
+    
+}
 
 
 //CHARACTER SCREEN!!
@@ -384,6 +402,9 @@ function addToInventory(){
             document.getElementById("overlay").classList.remove("hidden")
             //SET 1
             var item = storage[dataName.id]
+            //set css grade color
+            b.style.setProperty('--gradecolor', `${item.grade.color}`);
+
             document.getElementById("item-modal").name=dataName.id
             var modalName = document.getElementById("item-modal-name")
             var modalRank = document.getElementById("item-modal-rank")
@@ -430,7 +451,8 @@ function addToInventory(){
                 modalSpeed.style=`font-size: ${50+item.speed/2}px`
             }
             //upgrade button
-
+            var itemCost = (item.level*5)*gradeStatVal(item.grade.grade)
+            document.getElementById("upgrade").innerHTML = `Upgrade: ${itemCost} gold`
         }
 
         //grade
@@ -480,6 +502,7 @@ function closeModal(){
 function upgradeItem(){
     var item = storage[document.getElementById("item-modal").name]
     var itemCost = (item.level*5)*gradeStatVal(item.grade.grade)
+    var nextItemCost = ((item.level+1)*5)*gradeStatVal(item.grade.grade)
 
     if(gold>=itemCost){
         var damage = Math.floor(damageCalc(item.level)/2)
@@ -540,6 +563,7 @@ function upgradeItem(){
         if(modalSpeed.style.fontSize < 80){
             modalSpeed.style=`font-size: ${50+item.speed/2}px`
         }
+        document.getElementById("upgrade").innerHTML = `Upgrade: ${nextItemCost} gold`
     }
 }
 

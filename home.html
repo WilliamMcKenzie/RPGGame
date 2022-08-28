@@ -12,9 +12,9 @@
     </head>
     <body>
         <div class="menu" id="menu">
-            <input type="image" src="https://cdn-icons-png.flaticon.com/512/2014/2014307.png" id="dungeon-button" onclick="generator()"/>
-            <input type="image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Store_Building_Flat_Icon_Vector.svg/1024px-Store_Building_Flat_Icon_Vector.svg.png" id="market-button" onclick="generator()"/>
-            <input type="image" src="https://png.pngtree.com/png-vector/20220704/ourmid/pngtree-knight-helmet-png-image_5684874.png" id="character-button" onclick="characterInfo()"/>
+            <input type="image" src="sprites/dungeon.png" id="dungeon-button" onclick="generator()"/>
+            <input type="image" src="sprites/dojo.png" id="dojo-button" onclick="market()"/>
+            <input type="image" src="sprites/armoury.png" id="character-button" onclick="characterInfo()"/>
             <img id="menu-background" src="https://beartoothgrill.net/wp-content/uploads/2016/11/Half-half-circle-lightgreen.png">
         </div>
         <div class="currency">
@@ -62,7 +62,7 @@
         </div>
         <div class="hidden" id="overlay"></div>
         <div class="market hidden" id="market">
-
+            <img src="https://trainingsensei.com/wp-content/uploads/2020/08/sensei-icon-4-trans.png" id="sensei">
         </div>
         <div class="character hidden" id="character">
             <div id="inventory" class="hidden">
@@ -79,6 +79,7 @@
         <div id="item-view" class="hidden item-view" style="position: absolute; z-index: 10;">
             <div id="item-modal">
                 <div id="item-modal-header">
+                    <div>
                         <label for="item-modal-name" style="color:#ADBDBF; padding-top: 30px; padding-bottom: 30px; font-style: italic;" class="modal-label">Item</th>
                         <div id="item-modal-name" class="modal-text"></div>
                         <label for="item-modal-rank" style="color:#ADBDBF; font-style: italic;" class="modal-label">Rank</label>
@@ -87,9 +88,10 @@
                         <div id="item-modal-type" class="modal-text"></div>
                         <label for="item-modal-level" style="color:#ADBDBF; font-style: italic;" class="modal-label">Level</label>
                         <div id="item-modal-level" class="modal-text"></div>
-                        <button onclick="upgradeItem()" class="upgrade-button">Upgrade</button>
+                        <button onclick="upgradeItem()" class="upgrade-button" id="upgrade">Upgrade</button>
                         <button onclick="equipItem()" class="upgrade-button">Equip</button>
-                        <button onclick="closeModal()" class="closeModal">&times;</button>
+                    </div>
+                    <button onclick="closeModal()" class="closeModal">&times;</button>
                 </div>
                 <div id="item-modal-body">
                     <label for="item-modal-damage" class="hidden" id="damage-label">Damage</label>

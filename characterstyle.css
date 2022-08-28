@@ -56,6 +56,8 @@
 #item-modal-header{
     text-align: center;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     color: var(--text);
     font-family: 'Trebuchet MS';
     font-weight: bold;
@@ -120,12 +122,13 @@
     border: none;
     font-weight: 700;
     color: #5C6667;
-    background-color: aliceblue;
-    padding-left:20px; 
+    background: none;
+    border: none;
     padding-right:20px; 
     padding-top:5px; 
     padding-bottom:5px;
-    margin-left: 40px;
+    top: 40%;
+    left: 0%;
 }
 .closeModal:hover {
     transform: scale(1.2);
@@ -148,12 +151,13 @@
     transition: 1s;
 }
 .upgrade-button:hover {
-    border-color: #32BB1F;
-    color: aliceblue;
+    border-color: var(--gradecolor);
+    color: var(--gradecolor);
     transform: scale(1.05);
 }
 .upgrade-button:active{
-    background-color: #1d7611;
+    background-color: var(--gradecolor);
+    color: aliceblue;
     transform: scale(0.90);
     transition: 0s;
 }
