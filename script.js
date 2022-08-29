@@ -16,7 +16,7 @@ var enemySpeed
 var enemyGrade
 
 var drops = []
-var moves = [{name: "Slam", damage: 12}]
+var moves = [{name: "Slam", damage: 5}]
 
 var storage = []
 var equipped = new Map()
@@ -227,16 +227,16 @@ function itemGenerator(){
 
     var style = random(3)-1
     if(gradeVal > 5){
-        var weaponStyles = [{name:"Sabre", damage:15, speed:5},{name:"Katana", damage:25, speed:0},{name:"Cutless", damage:5, speed:10}]
-        var armourStyles = [{name:"Studded Leather", health:40, speed:5},{name:"Breastplate", health:65, speed:-5},{name:"Cloak", health:20, speed:10}]
-        var ringStyles = [{name:"Atlas", health:10, damage:5, speed:4},{name:"Inscription", health:4, damage:2, speed:12},{name:"Grimoire", health:40, damage:-6, speed:-12}]
+        var weaponStyles = [{name:"Saber", damage:15, speed:5, img: "sprites/weapon-saber.png"},{name:"Katana", damage:25, speed:0, img: "sprites/weapon-katana.png"},{name:"Cutless", damage:5, speed:10, img: "sprites/weapon-cutless.png"}]
+        var armourStyles = [{name:"Studded Leather", health:40, speed:5, img: "sprites/armour-studded_leather.png"},{name:"Breastplate", health:65, speed:-5, img: "sprites/armour-breastplate.png"},{name:"Cloak", health:20, speed:10, img: "sprites/armour-cloak.png"}]
+        var ringStyles = [{name:"Atlas", health:10, damage:5, speed:4, img: "sprites/ring-atlas.png"},{name:"Inscription", health:4, damage:2, speed:12, img: "sprites/ring-inscription.png"},{name:"Grimoire", health:40, damage:-6, speed:-12, img: "sprites/ring-grimoire.png"}]
 
         name = advancedRandomName()
     }
     else{
-        var weaponStyles = [{name:"Blade", damage:5, speed:0},{name:"Claymore", damage:10, speed:-5},{name:"Daggers", damage:0, speed:5}]
-        var armourStyles = [{name:"Platemail", health:20, speed:0},{name:"Chainmail", health:40, speed:-10},{name:"Leather", health:10, speed:5}]
-        var ringStyles = [{name:"Necklace", health:5, damage:2, speed:2},{name:"Ring", health:2, damage:1, speed:6},{name:"Gauntlets", health:20, damage:-3, speed:-6}]
+        var weaponStyles = [{name:"Blade", damage:5, speed:0, img: "sprites/weapon-blade.png"},{name:"Claymore", damage:10, speed:-5, img: "sprites/weapon-claymore.png"},{name:"Daggers", damage:0, speed:5, img: "sprites/weapon-daggers.png"}]
+        var armourStyles = [{name:"Chainmail", health:20, speed:0, img: "sprites/armour-chainmail.png"},{name:"Platemail", health:40, speed:-10, img: "sprites/armour-platemail.png"},{name:"Leather", health:10, speed:5, img: "sprites/armour-leather.png"}]
+        var ringStyles = [{name:"Necklace", health:5, damage:2, speed:2, img: "sprites/ring-necklace.png"},{name:"Ring", health:2, damage:1, speed:6, img: "sprites/ring-ring.png"},{name:"Gauntlet", health:20, damage:-3, speed:-6, img: "sprites/ring-gauntlet.png"}]
 
         name = randomName()
     }
@@ -259,13 +259,13 @@ function itemGenerator(){
     var res 
     switch(num){
         case 1:
-            res = new Weapon(`${weaponStyle.name} of the ${name}`, damage+weaponStyle.damage, speed+weaponStyle.speed, grade, enemyLevel)
+            res = new Weapon(`${weaponStyle.name} of the ${name}`, damage+weaponStyle.damage, speed+weaponStyle.speed, grade, enemyLevel, weaponStyle.img)
             break;
         case 2:
-            res = new Armour(`${armourStyle.name} of the ${name}`, health+armourStyle.health, speed+armourStyle.speed, grade, enemyLevel)
+            res = new Armour(`${armourStyle.name} of the ${name}`, health+armourStyle.health, speed+armourStyle.speed, grade, enemyLevel, armourStyle.img)
             break;
         case 3:
-            res = new Ring(`${ringStyle.name} of the ${name}`, health+ringStyle.health, damage+ringStyle.damage, speed+ringStyle.speed, grade, enemyLevel)
+            res = new Ring(`${ringStyle.name} of the ${name}`, health+ringStyle.health, damage+ringStyle.damage, speed+ringStyle.speed, grade, enemyLevel, ringStyle.img)
             break;
         default:
             window.alert("dis shit broke")
@@ -349,18 +349,24 @@ function dropTable(){
     for(var i = 0; i < count; i++){
         drops.push(itemGenerator())
     }
-    console.log(drops)
     for(var i = 0; i < count; i++){
         storage.push(drops[i])
         let item = document.createElement("tr");
         item.classList.add("tempData")
-        let dataName = document.createElement("td");
+        let itemData = document.createElement("td")
+        let dataName = document.createElement("div");
+        let dataImg = document.createElement("img");
         dataName.innerHTML = drops[i].name
+        //icon
+        dataImg.src = drops[i].img
+        dataImg.style="display: inline-block; vertical-align: top;max-width:95px;max-height:95px;width: auto;height: auto; margin-bottom: 3%;"
         let dataGrade = document.createElement("td");
         dataGrade.innerHTML = drops[i].grade.grade
         dataGrade.style = `color: ${drops[i].grade.color}`
         document.getElementById("drop-table").appendChild(item);
-        item.appendChild(dataName)
+        item.appendChild(itemData)
+        itemData.appendChild(dataImg)
+        itemData.appendChild(dataName)
         item.appendChild(dataGrade)
     }
 }
@@ -393,10 +399,13 @@ function addToInventory(){
         //name
         let dataNameParent = document.createElement("td");
         let dataName = document.createElement("input");
+        let dataImg = document.createElement("img");
         dataName.type = "button"
         dataName.value = storage[i].name
         dataName.id = i
         dataName.classList.add("inventoryItemName")
+        dataImg.src = storage[i].img
+        dataImg.style="display: inline-block; vertical-align: top;max-width:95px;max-height:95px;width: auto;height: auto; margin-right: 10px;"
         dataName.onclick = function openModal(){
             document.getElementById("item-view").classList.remove("hidden")
             document.getElementById("overlay").classList.remove("hidden")
@@ -433,7 +442,7 @@ function addToInventory(){
             }
             else{
                 document.getElementById("damage-label").classList.add("hidden")
-                modalDamage.classList.add("hidden")
+                modalDamage.style="display: none;"
             }
             if("health" in item){
                 modalHealth.innerHTML = item.health
@@ -444,7 +453,7 @@ function addToInventory(){
             }
             else{
                 document.getElementById("health-label").classList.add("hidden")
-                modalHealth.classList.add("hidden")
+                modalHealth.style="display: none"
             }
             modalSpeed.innerHTML = item.speed
             if(modalSpeed.style.fontSize < 80){
@@ -480,6 +489,7 @@ function addToInventory(){
         //add them
         document.getElementById("inventory-table").appendChild(item);
         item.appendChild(dataNameParent)
+        dataNameParent.appendChild(dataImg)
         dataNameParent.appendChild(dataName)
         item.appendChild(dataGrade)
         document.getElementById("delete-button-table").appendChild(deleteItem);
@@ -497,6 +507,7 @@ function clearInventory(){
 function closeModal(){
     document.getElementById("item-view").classList.add("hidden")
     document.getElementById("overlay").classList.add("hidden")
+    docucument
 }
 
 function upgradeItem(){
@@ -579,33 +590,36 @@ function equipItem(){
 
 
 class Weapon{
-    constructor(name, damage, speed, grade, level){
+    constructor(name, damage, speed, grade, level, img){
        this.damage = damage 
        this.speed = speed
        this.grade = grade
        this.name = name
        this.level = level
+       this.img = img
     }
 }
 
 class Armour{
-    constructor(name, health, speed, grade, level){
+    constructor(name, health, speed, grade, level, img){
        this.health = health
        this.speed = speed
        this.grade = grade
        this.name = name
        this.level = level
+       this.img = img
     }
 }
 
 class Ring{
-    constructor(name, health, speed, damage, grade,level){
+    constructor(name, health, speed, damage, grade,level, img){
        this.health = health
        this.speed = speed
        this.damage = damage
        this.grade = grade
        this.name = name
        this.level = level
+       this.img = img
     }
 }
 

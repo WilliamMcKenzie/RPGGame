@@ -34,9 +34,9 @@
                 <div id="drop-table-parent" class="hidden">
                     <table id="drop-table" >
                         <caption style="padding: 20px; font-size: 60px; color:#E0B23B;">DROPS:</caption>
-                        <tr>
-                            <th style="color:#ADBDBF">Item:</th>
-                            <th style="color:#ADBDBF">Rank:</th>
+                        <tr id="drop-header">
+                            <th style="color:aliceblue">Item:</th>
+                            <th style="color:aliceblue">Rank:</th>
                         </tr>
                     </table>
                     <button class="continue" onclick="home(1)" style="margin-right: 100px;" style="float: right;">Continue</button>
@@ -66,7 +66,7 @@
         </div>
         <div class="character hidden" id="character">
             <div id="inventory" class="hidden">
-                <table id="inventory-table">
+                <table id="inventory-table" style="text-align: left; font-weight: bold;">
                     <tr>
                         <th style="color:#ADBDBF">Item:</th>
                         <th style="color:#ADBDBF">Rank:</th>
@@ -78,7 +78,7 @@
         </div>
         <div id="item-view" class="hidden item-view" style="position: absolute; z-index: 10;">
             <div id="item-modal">
-                <div id="item-modal-header">
+                <div id="item-modal-header"> 
                     <div>
                         <label for="item-modal-name" style="color:#ADBDBF; padding-top: 30px; padding-bottom: 30px; font-style: italic;" class="modal-label">Item</th>
                         <div id="item-modal-name" class="modal-text"></div>

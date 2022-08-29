@@ -202,9 +202,11 @@ body::-webkit-scrollbar {
     margin-left: auto;
     margin-right: auto;
     border: 10px solid var(--bordercolor);
-    border-radius: 50px;
     background-color: aliceblue;
 }   
+#drop-header {
+    background-color: #5C6667
+}
 #drop-table-parent {
     position: absolute;
     top: 45%;
@@ -245,5 +247,9 @@ body::-webkit-scrollbar {
 }
 th, td {
     padding: 10px;
+}
+tr th{
+    text-align: left;
+    font-weight: bold;
 }
 

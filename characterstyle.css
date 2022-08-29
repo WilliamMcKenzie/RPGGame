@@ -7,7 +7,6 @@
     margin-left: auto;
     margin-right: auto;
     border: 10px solid var(--bordercolor);
-    border-radius: 50px;
     background-color: aliceblue;
     border-collapse: collapse;
     z-index: 3;
@@ -21,6 +20,7 @@
     font-family: 'Trebuchet MS';
     font-weight: bold;
     font-size: 40px;
+    margin-top: 3%;
 }
 
 #deleteButton{
@@ -34,6 +34,7 @@
     font-weight: 700;
     color: #5C6667;
     background-color: aliceblue;
+    margin-bottom: 42px;
 }
 #deleteButton:hover {
     transform: scale(1.05);
